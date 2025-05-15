@@ -66,7 +66,7 @@ list(APPEND ${PROJECT_NAME}_TEST_includes ${${PROJECT_NAME}_includes} ${src_test
 
 #################### Copy file ################################
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ListPolygons DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Polygons DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 ############################## Add executable ##################################################
 

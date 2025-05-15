@@ -9,13 +9,16 @@ namespace PolygonalLibrary
 bool ImportMesh(PolygonalMesh& mesh, string filename)
 {
 
-    if(!ImportCell0Ds(mesh, filename))
+    if(!ImportCell0Ds(mesh, filename+"Cells0D.csv"))
         return false;
 
-    if(!ImportCell1Ds(mesh, filename))
+    if(!ImportCell1Ds(mesh, filename+"Cells1D.csv"))
         return false;
 
-    if(!ImportCell2Ds(mesh, filename))
+    if(!ImportCell2Ds(mesh, filename+"Cells2D.csv"))
+        return false;
+    
+    if(!ImportCell3Ds(mesh, filename+"Cells3D.csv"))
         return false;
 
     return true;
@@ -107,15 +110,6 @@ bool ImportCell1Ds(PolygonalMesh& mesh, string filename)
 
         converter >> id >>  delimiter >> mesh.Cell1DsExtrema(0, id) >> delimiter >>  mesh.Cell1DsExtrema(1, id);
         mesh.Cell1DsId.push_back(id);
-
-        //Check if the edge has a non null length
-        int& start = mesh.Cell1DsExtrema(0, id);
-        int& end = mesh.Cell1DsExtrema(1, id);
-
-        if(start == end)
-        {
-            cerr<<id<<" has length equal to zero" << endl;
-        }
     }
 
     return true;
@@ -144,7 +138,7 @@ bool ImportCell2Ds(PolygonalMesh& mesh, string filename)
     string line;
     while (getline(file, line))
         listLines.push_back(line);
-
+    
     file.close();
 
     // remove header
@@ -207,17 +201,16 @@ bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
     string line;
     while (getline(file, line))
         listLines.push_back(line);
-
     file.close();
 
     // remove header
     listLines.pop_front();
 
-    mesh.NumCell2Ds = listLines.size();
+    mesh.NumCell3Ds = listLines.size();
 
     if (mesh.NumCell3Ds == 0)
     {
-        cerr << "There is no cell 2D" << endl;
+        cerr << "There is no cell 3D" << endl;
         return false;
     }
 
@@ -263,5 +256,15 @@ bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
 
     return true;
 }
+
+
+bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned int c){
+    return (p <= 5 && p >= 3 &&
+            q <= 5 && q >= 3 &&
+            ((b >= 1 && c == 0) || (b == 0 && c >= 1)) &&
+            (p == 3 || q == 3)
+            );
+}
+
 
 }

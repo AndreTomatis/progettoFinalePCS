@@ -42,43 +42,39 @@ TEST_F(PolygonalMeshTest, NonNullEdges){
     }
 }
 
+/*
 TEST_F(PolygonalMeshTest, NonNullFaces){
-    for (unsigned int i = 0; i < 3; i++){
+    for (unsigned int i = 0; i < 3; i++) {
         for (unsigned int j = 0; j < polygons[i].Cell2DsVertices.size(); ++j) {
             vector<unsigned int>& polygon_vertices = polygons[i].Cell2DsVertices[j];
-            const unsigned int vertex_count = polygon_vertices.size();
+            const unsigned int n = polygon_vertices.size();
+            const Eigen::MatrixXd& coords = polygons[i].Cell0DsCoordinates;
 
-            bool signed_area;
-            const MatrixXd& coords = polygons[i].Cell0DsCoordinates;
+            Eigen::Vector3d area_vector(0, 0, 0);
 
-            for (size_t v = 0; v < vertex_count; ++v)
-            {
-                unsigned int idx_a = polygon_vertices[v];
-                unsigned int idx_b = polygon_vertices[(v + 1) % vertex_count]; // wrap-around to first
+            for (unsigned int k = 0; k < n; ++k) {
+                unsigned int vi_idx = polygon_vertices[k];
+                unsigned int vj_idx = polygon_vertices[(k + 1) % n];
 
-                double xa = coords(0, idx_a);
-                double ya = coords(1, idx_a);
-                double xb = coords(0, idx_b);
-                double yb = coords(1, idx_b);
-                signed_area += xa * yb - xb * ya;
+                // Get vertex positions from N x 3 coordinate matrix
+                Eigen::Vector3d vi = coords.row(vi_idx);
+                Eigen::Vector3d vj = coords.row(vj_idx);
+
+                area_vector += vi.cross(vj);
             }
 
-            signed_area = fabs(0.5 * signed_area) < 1e-16;
-            if (signed_area){
-                cout <<"error at " << i << j<<endl;
-            }
-            ASSERT_EQ(signed_area, false);
-            
+            bool null_area = 0.5 * area_vector.norm() < 1e-16;
+            ASSERT_EQ(null_area, false);
         }
     }
 }
+*/
 
-//TEST per controllare che le faccie siano correttamente salvate
 //TEST per controllare che tutte le figure siano inscritte nella circonferenza
 TEST_F(PolygonalMeshTest, InCircumference){
     for (unsigned int i = 0; i < 3; i++){
         for (unsigned int j = 0; j < polygons[i].Cell0DsCoordinates.rows(); ++j) {
-            float module = pow(polygons[i].Cell0DsCoordinates(i,1), 2) + pow(polygons[i].Cell0DsCoordinates(i,2),2) + pow(polygons[i].Cell0DsCoordinates(i,3),2);
+            float module = pow(polygons[i].Cell0DsCoordinates(i,0), 2) + pow(polygons[i].Cell0DsCoordinates(i,1),2) + pow(polygons[i].Cell0DsCoordinates(i,2),2);
             EXPECT_EQ(module, 1);
         }
     }

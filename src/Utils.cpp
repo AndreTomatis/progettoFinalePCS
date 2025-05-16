@@ -10,23 +10,19 @@ bool ImportMesh(PolygonalMesh& mesh, string filename)
 {
 
     if(!ImportCell0Ds(mesh, filename+"Cells0D.csv")){
-        cout << "0D";
         return false;
     }
         
 
     if(!ImportCell1Ds(mesh, filename+"Cells1D.csv")){
-        cout << "1D";
         return false;
     }
 
     if(!ImportCell2Ds(mesh, filename+"Cells2D.csv")){
-        cout << "2D";
         return false;
     }
     
     if(!ImportCell3Ds(mesh, filename+"Cells3D.csv")){
-        cout << "3D";
         return false;
     }
 
@@ -75,7 +71,6 @@ bool ImportCell0Ds(PolygonalMesh& mesh, string filename)
         converter >>  id >> delimiter >> mesh.Cell0DsCoordinates(0, id) >> delimiter >> mesh.Cell0DsCoordinates(1, id) >> delimiter >> mesh.Cell0DsCoordinates(2, id);
 
         mesh.Cell0DsId.push_back(id);
-        
 
     }
 

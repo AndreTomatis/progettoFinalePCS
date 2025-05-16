@@ -9,17 +9,26 @@ namespace PolygonalLibrary
 bool ImportMesh(PolygonalMesh& mesh, string filename)
 {
 
-    if(!ImportCell0Ds(mesh, filename+"Cells0D.csv"))
+    if(!ImportCell0Ds(mesh, filename+"Cells0D.csv")){
+        cout << "0D";
         return false;
+    }
+        
 
-    if(!ImportCell1Ds(mesh, filename+"Cells1D.csv"))
+    if(!ImportCell1Ds(mesh, filename+"Cells1D.csv")){
+        cout << "1D";
         return false;
+    }
 
-    if(!ImportCell2Ds(mesh, filename+"Cells2D.csv"))
+    if(!ImportCell2Ds(mesh, filename+"Cells2D.csv")){
+        cout << "2D";
         return false;
+    }
     
-    if(!ImportCell3Ds(mesh, filename+"Cells3D.csv"))
+    if(!ImportCell3Ds(mesh, filename+"Cells3D.csv")){
+        cout << "3D";
         return false;
+    }
 
     return true;
 

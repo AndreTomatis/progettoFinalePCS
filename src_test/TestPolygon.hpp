@@ -64,8 +64,11 @@ TEST_F(PolygonalMeshTest, NonNullFaces){
             }
 
             signed_area = fabs(0.5 * signed_area) < 1e-16;
-            cout << i << " " << j << endl;
+            if (signed_area){
+                cout <<"error at " << i << j<<endl;
+            }
             ASSERT_EQ(signed_area, false);
+            
         }
     }
 }
@@ -75,7 +78,7 @@ TEST_F(PolygonalMeshTest, NonNullFaces){
 TEST_F(PolygonalMeshTest, InCircumference){
     for (unsigned int i = 0; i < 3; i++){
         for (unsigned int j = 0; j < polygons[i].Cell0DsCoordinates.rows(); ++j) {
-            float module = pow(polygons[i].Cell1DsExtrema(i,1), 2) + pow(polygons[i].Cell1DsExtrema(i,2),2) + pow(polygons[i].Cell1DsExtrema(i,3),2);
+            float module = pow(polygons[i].Cell0DsCoordinates(i,1), 2) + pow(polygons[i].Cell0DsCoordinates(i,2),2) + pow(polygons[i].Cell0DsCoordinates(i,3),2);
             EXPECT_EQ(module, 1);
         }
     }

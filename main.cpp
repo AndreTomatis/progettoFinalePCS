@@ -25,19 +25,21 @@ int main(int argc, char* argv[])
             return 1;
         }
 
-        if (q == 3){
+        if (q == 3)
             filename += "./p" + to_string(p) + "q" + to_string(q) + "/";
-        }
 
-        if (p == 3 && q != 3){
+        if (p == 3 && q != 3)
             filename += "./p" + to_string(q) + "q" + to_string(p) + "/";
-        }
 
         if(!ImportMesh(mesh, filename))
         {
             cerr << "Unable to import the mesh, something went wrong" << endl;
             return 1;
         }
+
+        if (p==3 && q != 3) mesh = mesh.CreateDual();
+
+        mesh.ExportTXT();
 
     }else{
         cerr << "Invalid input. Input arguments must be either 4 or 6." << endl;

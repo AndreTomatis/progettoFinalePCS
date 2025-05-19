@@ -252,9 +252,9 @@ bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
         for (unsigned int i = 0; i < nFaces; ++i)
             faces[i] = stoi(tokens[idx++]);
         
-        mesh.Cell2DsId.push_back(id);
-        mesh.Cell2DsVertices.push_back(vertices);
-        mesh.Cell2DsEdges.push_back(edges);
+        mesh.Cell3DsId.push_back(id);
+        mesh.Cell3DsVertices.push_back(vertices);
+        mesh.Cell3DsEdges.push_back(edges);
         mesh.Cell3DsFaces.push_back(faces);
     }
 

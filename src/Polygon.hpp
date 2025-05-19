@@ -249,11 +249,11 @@ struct PolygonalMesh
             for (unsigned int j = 0; j < Cell3DsVertices[k].size(); j++)
                 ofs4 << Cell3DsVertices[k][j] << ";";
             
-            ofs4 << Cell3DsEdges.size() << ";";
+            ofs4 << Cell3DsEdges[k].size() << ";";
             for (unsigned int j = 0; j < Cell3DsEdges[k].size(); j++)
                 ofs4 << Cell3DsEdges[k][j] << ";";
             
-            ofs4 << Cell3DsFaces.size() << ";";
+            ofs4 << Cell3DsFaces[k].size() << ";";
             for (unsigned int j = 0; j < Cell3DsFaces[k].size(); j++)
                 ofs4 << Cell3DsFaces[k][j] << ";";
             

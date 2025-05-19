@@ -38,18 +38,51 @@ TEST_F(PolygonalMeshTest, NonNullEdges){
     for (unsigned int i = 0; i < 3; i++){
         for (unsigned int j = 0; j < polygons[i].Cell1DsExtrema.cols(); ++j) {
             
-            bool zero_length = (polygons[i].Cell1DsExtrema(0,i) == polygons[i].Cell1DsExtrema(1,i));
+            bool zero_length = (polygons[i].Cell1DsExtrema(0,j) == polygons[i].Cell1DsExtrema(1,j));
             
             EXPECT_EQ(zero_length, false);
         }
     }
+}
+
+//test per vedere se tutti gli edges sono lunghi uguali
+TEST_F(PolygonalMeshTest, SameLengthEdges){
     
+    for (unsigned int i = 0; i < 3; i++){
+        auto id1 = polygons[i].Cell1DsExtrema(0,0),
+             id2 = polygons[i].Cell1DsExtrema(1,0);
+            
+        double ref_length = (polygons[i].Cell0DsCoordinates.col(id1) - polygons[i].Cell0DsCoordinates.col(id2)).norm();
+        for (unsigned int j = 0; j < polygons[i].Cell1DsExtrema.cols(); ++j) {
+            id1 = polygons[i].Cell1DsExtrema(0,j),
+            id2 = polygons[i].Cell1DsExtrema(1,j);
+            double cmp_length = (polygons[i].Cell0DsCoordinates.col(id1) - polygons[i].Cell0DsCoordinates.col(id2)).norm();
+
+            if (ref_length - cmp_length >= 0.01){
+                cout << i << j << " " << ref_length << " " << cmp_length << endl;
+            }
+
+            EXPECT_EQ(ref_length - cmp_length < 0.01, true);
+        }
+    }
 }
 
 
+
 TEST_F(PolygonalMeshTest, NonNullFaces){
-    for (unsigned int i = 0; i < 3; i++) {
-        ;//cose
+    for (unsigned int i = 0; i < 2; i++) {
+        for(unsigned int j = 0; j < polygons[i].Cell2DsVertices.size(); j++){
+            Eigen::Vector3d area_vector(0, 0, 0);
+            for(unsigned int k =0; k < polygons[i].Cell2DsVertices[j].size(); k++){
+                auto id1 =  polygons[i].Cell2DsVertices[j][k];
+                auto id2 =  polygons[i].Cell2DsVertices[j][(k+1) % polygons[i].Cell2DsVertices[j].size()];
+                const Eigen::Vector3d& v1= polygons[i].Cell0DsCoordinates.col(id1);
+                const Eigen::Vector3d& v2= polygons[i].Cell0DsCoordinates.col(id2);
+                area_vector += v1.cross(v2);
+            }
+            bool null_area = (0.5 * area_vector.norm()) < 1e-16;
+            EXPECT_EQ(null_area, false);
+        }
     }
 }
 

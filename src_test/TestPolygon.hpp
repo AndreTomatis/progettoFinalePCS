@@ -70,7 +70,7 @@ TEST_F(PolygonalMeshTest, SameLengthEdges){
 
 
 TEST_F(PolygonalMeshTest, NonNullFaces){
-    for (unsigned int i = 0; i < 2; i++) {
+    for (unsigned int i = 0; i < 3; i++) {
         for(unsigned int j = 0; j < polygons[i].Cell2DsVertices.size(); j++){
             Eigen::Vector3d area_vector(0, 0, 0);
             for(unsigned int k =0; k < polygons[i].Cell2DsVertices[j].size(); k++){
@@ -91,8 +91,10 @@ TEST_F(PolygonalMeshTest, NonNullFaces){
 TEST_F(PolygonalMeshTest, InCircumference){
     for (unsigned int i = 0; i < 3; i++){
         for (unsigned int j = 0; j < polygons[i].Cell0DsCoordinates.cols(); ++j) {
-            float module = pow(polygons[i].Cell0DsCoordinates(0,i), 2) + pow(polygons[i].Cell0DsCoordinates(1,i),2) + pow(polygons[i].Cell0DsCoordinates(2,i),2);
-            EXPECT_EQ(module, 1);
+            float module = pow(polygons[i].Cell0DsCoordinates(0,j), 2) + pow(polygons[i].Cell0DsCoordinates(1,j),2) + pow(polygons[i].Cell0DsCoordinates(2,j),2);
+            bool valid = abs(module - 1.0) < 1e-6;
+            
+            EXPECT_EQ(valid, true);
         }
     }
 }

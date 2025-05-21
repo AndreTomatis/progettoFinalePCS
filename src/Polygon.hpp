@@ -126,9 +126,9 @@ struct PolygonalMesh
         // create new faces
 
         dual.NumCell2Ds = NumCell0Ds;
-        dual.Cell2DsId.reserve(dual.NumCell2Ds);
-        dual.Cell2DsVertices.reserve(NumCell2Ds);
-        dual.Cell2DsEdges.reserve(q*NumCell2Ds/2);
+        dual.Cell2DsId.resize(dual.NumCell2Ds);
+        dual.Cell2DsVertices.resize(NumCell2Ds);
+        dual.Cell2DsEdges.resize(q*NumCell2Ds/2);
 
         for (unsigned int v_id = 0; v_id < NumCell0Ds; ++v_id) {
             vector<unsigned int> incident_faces;

@@ -12,6 +12,8 @@ namespace PolygonalLibrary {
 
 struct PolygonalMesh
 {
+    unsigned int p,q;
+
     unsigned int NumCell0Ds;
     unsigned int NumCell1Ds;
     unsigned int NumCell2Ds;
@@ -30,10 +32,12 @@ struct PolygonalMesh
     vector<vector<unsigned int>> Cell3DsEdges;
     vector<vector<unsigned int>> Cell3DsFaces;
 
+    PolygonalMesh(unsigned int p, unsigned int q) : p(p), q(q) {}
+
 
     PolygonalMesh CreateDual(){
 
-        PolygonalMesh dual;
+        PolygonalMesh dual(q,p);
         
         dual.NumCell0Ds = NumCell2Ds;
         dual.Cell0DsId.resize(dual.NumCell0Ds);
@@ -110,7 +114,7 @@ struct PolygonalMesh
         }
 
         dual.NumCell1Ds = edge_pairs.size();
-        dual.Cell1DsId.resize(dual.NumCell1Ds);
+        dual.Cell1DsId.reserve(dual.NumCell1Ds);
         dual.Cell1DsExtrema = MatrixXi(2, dual.NumCell1Ds);
 
         for (unsigned int i = 0; i < edge_pairs.size(); ++i) {
@@ -119,14 +123,12 @@ struct PolygonalMesh
             dual.Cell1DsExtrema(1, i) = edge_pairs[i].second;
         }
 
-
-
         // create new faces
 
         dual.NumCell2Ds = NumCell0Ds;
-        dual.Cell2DsId.resize(dual.NumCell2Ds);
-        dual.Cell2DsVertices.resize(dual.NumCell2Ds);
-        dual.Cell2DsEdges.resize(dual.NumCell2Ds);
+        dual.Cell2DsId.reserve(dual.NumCell2Ds);
+        dual.Cell2DsVertices.reserve(NumCell2Ds);
+        dual.Cell2DsEdges.reserve(q*NumCell2Ds/2);
 
         for (unsigned int v_id = 0; v_id < NumCell0Ds; ++v_id) {
             vector<unsigned int> incident_faces;
@@ -144,9 +146,9 @@ struct PolygonalMesh
             vector<unsigned int> face_ids = incident_faces;
             vector<unsigned int> edge_ids;
 
-            for (size_t i = 0; i < face_ids.size(); ++i) {
+            for (size_t i = 0; i < q; ++i) {
                 unsigned int f1 = face_ids[i];
-                unsigned int f2 = face_ids[(i + 1) % face_ids.size()];
+                unsigned int f2 = face_ids[(i + 1) % q];
                 edge_ids.push_back(edge_index_map[{f1, f2}]);
             }
 
@@ -170,7 +172,7 @@ struct PolygonalMesh
         }
 
         // project the vertices on a circumference
-        for(unsigned int i = 0; i < NumCell0Ds; i++){
+        for(unsigned int i = 0; i < dual.NumCell0Ds; i++){
             dual.Cell0DsCoordinates.col(i) /= dual.Cell0DsCoordinates.col(i).norm();
         }
 

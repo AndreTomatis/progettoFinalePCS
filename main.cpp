@@ -10,7 +10,7 @@ using namespace Gedim;
 
 int main(int argc, char* argv[])
 {
-    PolygonalMesh mesh;
+    
 
     string filename = "./Polygons/";
     
@@ -24,6 +24,8 @@ int main(int argc, char* argv[])
             cerr << "Invalid values of p, q, b or c" << endl;
             return 1;
         }
+
+        PolygonalMesh mesh(p,q);
 
         if (q == 3)
             filename += "./p" + to_string(p) + "q" + to_string(q) + "/";
@@ -50,13 +52,13 @@ int main(int argc, char* argv[])
 
     
 
-    UCDUtilities utilities;
+    /*UCDUtilities utilities;
     utilities.ExportPoints("./Cell0Ds.inp",
                            mesh.Cell0DsCoordinates);
 
     utilities.ExportSegments("./Cell1Ds.inp",
                              mesh.Cell0DsCoordinates,
                              mesh.Cell1DsExtrema);
-
+    */
     return 0;
 }

@@ -64,7 +64,6 @@ CMAKE_BINARY_DIR = /Users/andrea/Documents/progC/progettoFinalePCS/build
 
 # The main recursive "all" target.
 all: CMakeFiles/Facsimile.dir/all
-all: CMakeFiles/Facsimile_TEST.dir/all
 all: src/all
 all: src_test/all
 all: ExportParaview/all
@@ -78,7 +77,6 @@ preinstall: ExportParaview/preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Facsimile.dir/clean
-clean: CMakeFiles/Facsimile_TEST.dir/clean
 clean: src/clean
 clean: src_test/clean
 clean: ExportParaview/clean
@@ -154,32 +152,6 @@ Facsimile: CMakeFiles/Facsimile.dir/rule
 CMakeFiles/Facsimile.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile.dir/build.make CMakeFiles/Facsimile.dir/clean
 .PHONY : CMakeFiles/Facsimile.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/Facsimile_TEST.dir
-
-# All Build rule for target.
-CMakeFiles/Facsimile_TEST.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile_TEST.dir/build.make CMakeFiles/Facsimile_TEST.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile_TEST.dir/build.make CMakeFiles/Facsimile_TEST.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles --progress-num=5,6,7,8 "Built target Facsimile_TEST"
-.PHONY : CMakeFiles/Facsimile_TEST.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/Facsimile_TEST.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Facsimile_TEST.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles 0
-.PHONY : CMakeFiles/Facsimile_TEST.dir/rule
-
-# Convenience name for target.
-Facsimile_TEST: CMakeFiles/Facsimile_TEST.dir/rule
-.PHONY : Facsimile_TEST
-
-# clean rule for target.
-CMakeFiles/Facsimile_TEST.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile_TEST.dir/build.make CMakeFiles/Facsimile_TEST.dir/clean
-.PHONY : CMakeFiles/Facsimile_TEST.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

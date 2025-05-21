@@ -1,5 +1,4 @@
 /Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles/Facsimile.dir
-/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles/Facsimile_TEST.dir
 /Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles/edit_cache.dir
 /Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles/rebuild_cache.dir
 /Users/andrea/Documents/progC/progettoFinalePCS/build/src/CMakeFiles/edit_cache.dir

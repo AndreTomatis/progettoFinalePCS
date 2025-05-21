@@ -41,6 +41,8 @@ int main(int argc, char* argv[])
 
         if (p==3 && q != 3) mesh = mesh.CreateDual();
 
+        
+
         mesh.ExportTXT();
 
     }else{

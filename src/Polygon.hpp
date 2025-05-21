@@ -114,7 +114,7 @@ struct PolygonalMesh
         }
 
         dual.NumCell1Ds = edge_pairs.size();
-        dual.Cell1DsId.reserve(dual.NumCell1Ds);
+        dual.Cell1DsId.resize(dual.NumCell1Ds);
         dual.Cell1DsExtrema = MatrixXi(2, dual.NumCell1Ds);
 
         for (unsigned int i = 0; i < edge_pairs.size(); ++i) {
@@ -153,8 +153,8 @@ struct PolygonalMesh
             }
 
             dual.Cell2DsId[v_id] = v_id;
-            dual.Cell2DsVertices[v_id] = face_ids;
-            dual.Cell2DsEdges[v_id] = edge_ids;
+            dual.Cell2DsVertices.push_back(face_ids);
+            dual.Cell2DsEdges.push_back(edge_ids);
         }
 
 
@@ -183,6 +183,7 @@ struct PolygonalMesh
 
 
     void ExportTXT(){
+
         ofstream ofs("./Cell0Ds.txt");
 
         if (!ofs.is_open()) {

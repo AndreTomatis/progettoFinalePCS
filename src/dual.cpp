@@ -71,7 +71,7 @@ PolygonalMesh CreateDual(const PolygonalMesh& mesh){
             unsigned int f1 = faces[0];
             unsigned int f2 = faces[1];
 
-            edge_pairs.emplace_back(f1, f2); // push_back?
+            edge_pairs.emplace_back(f1, f2);
 
             edge_index_map[{f1, f2}] = dual_edge_id;
             edge_index_map[{f2, f1}] = dual_edge_id;

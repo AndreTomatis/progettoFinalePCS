@@ -70,10 +70,10 @@ PolygonalMesh Dijkstra(const PolygonalMesh& mesh, const unsigned int& src, const
     }
 
 
-    // remember shortest path
+    // remember shortest path node pairs
     vector<pair<unsigned int, unsigned int>> path;
     if (dist[dest] == INT_MAX){
-        return mesh; // No path
+        return mesh; // no path was found
     }
 
     for (unsigned int cur = dest; pred[cur] != -1; cur = pred[cur]){

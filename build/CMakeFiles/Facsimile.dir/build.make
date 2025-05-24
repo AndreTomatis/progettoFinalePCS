@@ -97,10 +97,24 @@ CMakeFiles/Facsimile.dir/src/Utils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Facsimile.dir/src/Utils.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/andrea/Documents/progC/progettoFinalePCS/src/Utils.cpp -o CMakeFiles/Facsimile.dir/src/Utils.cpp.s
 
+CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o: CMakeFiles/Facsimile.dir/flags.make
+CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o: /Users/andrea/Documents/progC/progettoFinalePCS/src/Dijkstra.cpp
+CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o: CMakeFiles/Facsimile.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o -MF CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o.d -o CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o -c /Users/andrea/Documents/progC/progettoFinalePCS/src/Dijkstra.cpp
+
+CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/andrea/Documents/progC/progettoFinalePCS/src/Dijkstra.cpp > CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.i
+
+CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/andrea/Documents/progC/progettoFinalePCS/src/Dijkstra.cpp -o CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.s
+
 CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o: CMakeFiles/Facsimile.dir/flags.make
 CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o: /Users/andrea/Documents/progC/progettoFinalePCS/ExportParaview/UCDUtilities.cpp
 CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o: CMakeFiles/Facsimile.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o -MF CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o.d -o CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o -c /Users/andrea/Documents/progC/progettoFinalePCS/ExportParaview/UCDUtilities.cpp
 
 CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.i: cmake_force
@@ -115,6 +129,7 @@ CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.s: cmake_force
 Facsimile_OBJECTS = \
 "CMakeFiles/Facsimile.dir/main.cpp.o" \
 "CMakeFiles/Facsimile.dir/src/Utils.cpp.o" \
+"CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o" \
 "CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o"
 
 # External object files for target Facsimile
@@ -122,6 +137,7 @@ Facsimile_EXTERNAL_OBJECTS =
 
 Facsimile: CMakeFiles/Facsimile.dir/main.cpp.o
 Facsimile: CMakeFiles/Facsimile.dir/src/Utils.cpp.o
+Facsimile: CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o
 Facsimile: CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o
 Facsimile: CMakeFiles/Facsimile.dir/build.make
 Facsimile: /Users/andrea/radioconda/lib/libgtest_main.1.14.0.dylib
@@ -129,7 +145,7 @@ Facsimile: /Users/andrea/radioconda/lib/libgmock_main.1.14.0.dylib
 Facsimile: /Users/andrea/radioconda/lib/libgmock.1.14.0.dylib
 Facsimile: /Users/andrea/radioconda/lib/libgtest.1.14.0.dylib
 Facsimile: CMakeFiles/Facsimile.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Facsimile"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/andrea/Documents/progC/progettoFinalePCS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable Facsimile"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Facsimile.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

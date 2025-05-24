@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Facsimile.dir/ExportParaview/UCDUtilities.cpp.o.d"
   "CMakeFiles/Facsimile.dir/main.cpp.o"
   "CMakeFiles/Facsimile.dir/main.cpp.o.d"
+  "CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o"
+  "CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o.d"
   "CMakeFiles/Facsimile.dir/src/Utils.cpp.o"
   "CMakeFiles/Facsimile.dir/src/Utils.cpp.o.d"
   "Facsimile"

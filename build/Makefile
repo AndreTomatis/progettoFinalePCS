@@ -177,6 +177,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile.dir/build.make CMakeFiles/Facsimile.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/Dijkstra.o: src/Dijkstra.cpp.o
+.PHONY : src/Dijkstra.o
+
+# target to build an object file
+src/Dijkstra.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile.dir/build.make CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.o
+.PHONY : src/Dijkstra.cpp.o
+
+src/Dijkstra.i: src/Dijkstra.cpp.i
+.PHONY : src/Dijkstra.i
+
+# target to preprocess a source file
+src/Dijkstra.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile.dir/build.make CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.i
+.PHONY : src/Dijkstra.cpp.i
+
+src/Dijkstra.s: src/Dijkstra.cpp.s
+.PHONY : src/Dijkstra.s
+
+# target to generate assembly for a file
+src/Dijkstra.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Facsimile.dir/build.make CMakeFiles/Facsimile.dir/src/Dijkstra.cpp.s
+.PHONY : src/Dijkstra.cpp.s
+
 src/Utils.o: src/Utils.cpp.o
 .PHONY : src/Utils.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/Dijkstra.o"
+	@echo "... src/Dijkstra.i"
+	@echo "... src/Dijkstra.s"
 	@echo "... src/Utils.o"
 	@echo "... src/Utils.i"
 	@echo "... src/Utils.s"

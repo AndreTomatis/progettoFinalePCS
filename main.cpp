@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Polygon.hpp"
 #include "Utils.hpp"
+#include "Dijkstra.hpp"
 #include "UCDUtilities.hpp"
 
 using namespace std;
@@ -40,6 +41,10 @@ int main(int argc, char* argv[])
         }
 
         if (p==3 && q != 3) mesh = mesh.CreateDual();
+
+        if (argc == 7){
+            mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));
+        }
 
         
 

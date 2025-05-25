@@ -44,6 +44,11 @@ int main(int argc, char* argv[])
 
         mesh = Triangulation_1(mesh, b);
 
+        // project the vertices on a circumference
+        for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
+            mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
+        }
+
         if (argc == 7){
             mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));
         }

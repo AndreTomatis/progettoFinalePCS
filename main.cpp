@@ -52,6 +52,15 @@ int main(int argc, char* argv[])
 
         mesh.ExportTXT();
 
+        UCDUtilities utilities;
+        utilities.ExportPoints("./Cell0Ds.inp",
+                            mesh.Cell0DsCoordinates);
+
+        utilities.ExportSegments("./Cell1Ds.inp",
+                                mesh.Cell0DsCoordinates,
+                                mesh.Cell1DsExtrema);
+
+
     }else{
         cerr << "Invalid input. Input arguments must be either 4 or 6." << endl;
         return 1;
@@ -61,13 +70,6 @@ int main(int argc, char* argv[])
 
     
 
-    /*UCDUtilities utilities;
-    utilities.ExportPoints("./Cell0Ds.inp",
-                           mesh.Cell0DsCoordinates);
-
-    utilities.ExportSegments("./Cell1Ds.inp",
-                             mesh.Cell0DsCoordinates,
-                             mesh.Cell1DsExtrema);
-    */
+    
     return 0;
 }

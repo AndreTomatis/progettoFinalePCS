@@ -271,4 +271,37 @@ bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned in
 }
 
 
+PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b){
+
+    PolygonalMesh geodetic(mesh.p, mesh.q);
+    Point ps[3];
+
+    int T = b*b;
+    geodetic.NumCell0Ds = 2*T + 2;
+
+    for(size_t i = 0; i < mesh.Cell2DsVertices.size(); ++i){
+        for(int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
+            ps[j].x = mesh.Cell0DsCoordinates(0, mesh.Cell2DsVertices[i][j]);
+            ps[j].y = mesh.Cell0DsCoordinates(1, mesh.Cell2DsVertices[i][j]);
+            ps[j].z = mesh.Cell0DsCoordinates(2, mesh.Cell2DsVertices[i][j]);
+        }
+    
+        Point u = (ps[1] - ps[0]) * (1.0 / b); // Vettore da A verso B
+        Point v = (ps[2] - ps[0]) * (1.0 / b); // Vettore da A verso C
+        
+        for (int h = 0; h < b + 1; ++h) {
+            Point p = ps[0] + u * h; 
+            for (int j = 0; j < b - h + 1; ++j) {
+                p = p + v;
+                //store points and vertices
+            }
+        }
+        
+    }
+
+
+    return geodetic;
+}
+
+
 }

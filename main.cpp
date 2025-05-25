@@ -54,11 +54,11 @@ int main(int argc, char* argv[])
 
         UCDUtilities utilities;
         utilities.ExportPoints("./Cell0Ds.inp",
-                            mesh.Cell0DsCoordinates);
+                             mesh.Cell0DsCoordinates);
 
         utilities.ExportSegments("./Cell1Ds.inp",
-                                mesh.Cell0DsCoordinates,
-                                mesh.Cell1DsExtrema);
+                                 mesh.Cell0DsCoordinates,
+                                 mesh.Cell1DsExtrema);
 
 
     }else{

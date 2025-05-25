@@ -278,6 +278,16 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b){
 
     int T = b*b;
     geodetic.NumCell0Ds = 2*T + 2;
+    geodetic.Cell0DsId.reserve(geodetic.NumCell0Ds);
+    geodetic.Cell0DsCoordinates = Eigen::MatrixXd::Zero(3, geodetic.NumCell0Ds);
+    
+    geodetic.NumCell1Ds = 6*T;
+    geodetic.Cell1DsId.reserve(geodetic.NumCell1Ds);
+    geodetic.Cell1DsExtrema = Eigen::MatrixXi(2, geodetic.NumCell1Ds);
+
+    unsigned int id_cnt = 0;
+    unsigned int edge_cnt = 0;
+    vector<vector<pair<unsigned int, Point>>> old_ps;
 
     for(size_t i = 0; i < mesh.Cell2DsVertices.size(); ++i){
         for(int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
@@ -290,10 +300,35 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b){
         Point v = (ps[2] - ps[0]) * (1.0 / b); // Vettore da A verso C
         
         for (int h = 0; h < b + 1; ++h) {
+            old_ps[h].resize(b-h);
+            
             Point p = ps[0] + u * h; 
+            
             for (int j = 0; j < b - h + 1; ++j) {
-                p = p + v;
+                p = p + v; 
+
                 //store points and vertices
+                unsigned int id = get_id(p, geodetic);
+                if (id == -1) id = id_cnt++;
+
+                
+    
+                geodetic.Cell0DsId.push_back(id);
+                geodetic.Cell0DsCoordinates(0,id) = p.x;
+                geodetic.Cell0DsCoordinates(1,id) = p.y;
+                geodetic.Cell0DsCoordinates(2,id) = p.z;
+
+                if (h > 0){
+                    geodetic.Cell1DsId.push_back(edge_cnt++);
+                    geodetic.Cell1DsExtrema(0,edge_cnt) = id;
+                    geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h-1][j].first;
+
+                    geodetic.Cell1DsId.push_back(edge_cnt++);
+                    geodetic.Cell1DsExtrema(0,edge_cnt) = id;
+                    geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h-1][j+1].first;
+                }
+
+                old_ps[h].push_back(make_pair(id, p));
             }
         }
         
@@ -301,6 +336,18 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b){
 
 
     return geodetic;
+}
+
+
+unsigned int get_id(Point p, PolygonalMesh geodetic){
+    for (unsigned int i =0; i < geodetic.Cell0DsCoordinates.cols(); i++){
+        if (abs(p.x - geodetic.Cell0DsCoordinates(0,i)) <= 0.0001
+            && abs(p.y - geodetic.Cell0DsCoordinates(1,i)) <= 0.0001
+            && abs(p.z - geodetic.Cell0DsCoordinates(2,i)) <= 0.0001){
+            return i;
+        }
+    }
+    return -1;
 }
 
 

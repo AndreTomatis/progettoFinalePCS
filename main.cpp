@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
         if (p==3 && q != 3) mesh = mesh.CreateDual();
 
-        //mesh = Triangulation_1(mesh, b);
+        mesh = Triangulation_1(mesh, b);
 
         if (argc == 7){
             mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));

@@ -227,7 +227,7 @@ struct PolygonalMesh
             for (unsigned int j = 0; j < Cell2DsVertices[k].size(); j++)
                 ofs3 << Cell2DsVertices[k][j] << ";";
             
-            ofs3 << Cell2DsEdges.size() << ";";
+            ofs3 << Cell2DsEdges[k].size() << ";";
             for (unsigned int j = 0; j < Cell2DsEdges[k].size(); j++)
                 ofs3 << Cell2DsEdges[k][j] << ";";
             

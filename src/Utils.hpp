@@ -42,9 +42,9 @@ bool ImportCell3Ds(PolygonalMesh& mesh, string filename);
 
 bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned int c);
 
-PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b);
+PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T);
 
-unsigned int get_id(Point p, PolygonalMesh geodetic);
-bool get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic);
+int get_id(Point p, PolygonalMesh geodetic);
+int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic);
 
 }

@@ -71,7 +71,7 @@ struct PolygonalMesh
         for (unsigned int f_id = 0; f_id < NumCell2Ds; ++f_id) {
 
             const auto& edge_ids = Cell2DsEdges[f_id];
-            const auto& vertex_ids = Cell2DsVertices[f_id];
+            // const auto& vertex_ids = Cell2DsVertices[f_id];
 
             for (size_t i = 0; i < edge_ids.size(); ++i) {
 

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 
+
 namespace PolygonalLibrary
 {
 bool ImportMesh(PolygonalMesh& mesh, string filename)
@@ -29,7 +30,6 @@ bool ImportMesh(PolygonalMesh& mesh, string filename)
     return true;
 
 }
-// ***************************************************************************
 
 
 bool ImportCell0Ds(PolygonalMesh& mesh, string filename)
@@ -76,7 +76,8 @@ bool ImportCell0Ds(PolygonalMesh& mesh, string filename)
 
     return true;
 }
-// ***************************************************************************
+
+
 bool ImportCell1Ds(PolygonalMesh& mesh, string filename)
 {
     ifstream file(filename);
@@ -118,8 +119,10 @@ bool ImportCell1Ds(PolygonalMesh& mesh, string filename)
 
     return true;
 }
-// ***************************************************************************
-vector<string> SplitCSVLine(const string& line) {
+
+
+vector<string> SplitCSVLine(const string& line) 
+{
     vector<string> tokens;
     string token;
     istringstream stream(line);
@@ -193,6 +196,7 @@ bool ImportCell2Ds(PolygonalMesh& mesh, string filename)
     return true;
 }
 
+
 bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
 {
     ifstream file;
@@ -262,7 +266,8 @@ bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
 }
 
 
-bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned int c){
+bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned int c)
+{
     return (p <= 5 && p >= 3 &&
             q <= 5 && q >= 3 &&
             ((b >= 1 && c == 0) || (b == 0 && c >= 1)) &&
@@ -315,7 +320,7 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
 
     for(size_t i = 0; i < mesh.Cell2DsVertices.size(); ++i){
 
-        for(int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
+        for(unsigned int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
             ps[j].x = mesh.Cell0DsCoordinates(0, mesh.Cell2DsVertices[i][j]);
             ps[j].y = mesh.Cell0DsCoordinates(1, mesh.Cell2DsVertices[i][j]);
             ps[j].z = mesh.Cell0DsCoordinates(2, mesh.Cell2DsVertices[i][j]);
@@ -326,12 +331,12 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
 
         
         
-        for (int h = 0; h < b + 1; ++h) {
+        for (unsigned int h = 0; h < b + 1; ++h) {
 
             
             old_ps[h].resize(b-h+1); 
 
-            for (int j = 0; j < b - h + 1; ++j) {
+            for (unsigned int j = 0; j < b - h + 1; ++j) {
                 cout << face_cnt << " " << edge_cnt << " " << h << " " << j << endl;
 
                 Point p = ps[0] + u*h + v*j; 
@@ -363,16 +368,7 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                         edge_cnt++;
                     }
 
-                    geodetic.Cell2DsId.push_back(face_cnt);
-                    geodetic.Cell2DsVertices[face_cnt].resize(3);
-                    geodetic.Cell2DsVertices[face_cnt][0] = id;
-                    geodetic.Cell2DsVertices[face_cnt][1] = old_ps[h-1][j];
-                    geodetic.Cell2DsVertices[face_cnt][2] = old_ps[h-1][j+1];
-                    geodetic.Cell2DsEdges[face_cnt].reserve(3);
-                    geodetic.Cell2DsEdges[face_cnt].push_back(get_edge(id, old_ps[h-1][j+1], geodetic));
-                    geodetic.Cell2DsEdges[face_cnt].push_back(get_edge(id, old_ps[h-1][j], geodetic));
-                    geodetic.Cell2DsEdges[face_cnt].push_back(get_edge(old_ps[h-1][j], old_ps[h-1][j+1], geodetic));
-                    face_cnt++;
+
                 }
 
                 if (j>0){
@@ -384,19 +380,6 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                         edge_cnt++;
                     }
 
-                    if (h > 0){
-                        geodetic.Cell2DsId.push_back(face_cnt);
-                        geodetic.Cell2DsVertices[face_cnt].resize(3);
-                        geodetic.Cell2DsVertices[face_cnt][0] = id;
-                        geodetic.Cell2DsVertices[face_cnt][1] = old_ps[h][j-1];
-                        geodetic.Cell2DsVertices[face_cnt][2] = old_ps[h-1][j];
-                        geodetic.Cell2DsEdges[face_cnt].reserve(3);
-                        geodetic.Cell2DsEdges[face_cnt].push_back(get_edge(id, old_ps[h][j-1], geodetic));
-                        geodetic.Cell2DsEdges[face_cnt].push_back(get_edge(id, old_ps[h-1][j], geodetic));
-                        geodetic.Cell2DsEdges[face_cnt].push_back(get_edge(old_ps[h-1][j], old_ps[h][j-1], geodetic));
-                        face_cnt++;
-                    }
-                    
                 }
 
                 old_ps[h][j] = id;
@@ -415,7 +398,8 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
 }
 
 
-int get_id(Point p, PolygonalMesh geodetic){
+int get_id(Point p, PolygonalMesh geodetic)
+{
     for (unsigned int i =0; i < geodetic.Cell0DsCoordinates.cols(); i++){
         if (abs(p.x - geodetic.Cell0DsCoordinates(0,i)) <= 0.0001
             && abs(p.y - geodetic.Cell0DsCoordinates(1,i)) <= 0.0001
@@ -427,7 +411,8 @@ int get_id(Point p, PolygonalMesh geodetic){
 }
 
 
-int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic){
+int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic)
+{
     for (unsigned int i =0; i < geodetic.Cell1DsExtrema.cols(); i++){
         if ((geodetic.Cell1DsExtrema(0,i) == id1 && geodetic.Cell1DsExtrema(1,i) == id2)
             || (geodetic.Cell1DsExtrema(0,i) == id2 && geodetic.Cell1DsExtrema(1,i) == id1)){
@@ -436,5 +421,6 @@ int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic){
     }
     return -1;
 }
+
 
 }

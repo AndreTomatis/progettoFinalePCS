@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
 {
     
     string filename = "./Polygons/";
+    bool swap = false;
     unsigned int p,q,b,c;
 
 
@@ -37,11 +38,11 @@ int main(int argc, char* argv[])
         }
 
 
-        if (p == 3 && q != 3)
-        {
+        if (p == 3 && q != 3){
             filename += "./p" + to_string(q) + "q" + to_string(p) + "/";
             mesh.p = q;
             mesh.q = 3;
+            swap = true;
         }
 
 
@@ -52,37 +53,27 @@ int main(int argc, char* argv[])
         }
 
 
-        if (p == 3 && q != 3)
-        {
-            mesh = mesh.CreateDual();
-        }
+        mesh = mesh.CreateDual();
        
 
         unsigned int T = b*b + b*c + c*c;
 
-
-        if (b!=0 && c==0){
-
-            if(p == 3){
-                mesh = Triangulation_1(mesh, b, T);
-            }
+        //mesh = Triangulation_1(mesh, b, T);
 
 
-            // if(p != 3 && q == 3){
-            //     cout << "Trying Goldberg" << endl;
-            //     mesh = mesh.CreateDual();
-            //     mesh = Triangulation_1(mesh, b, T);
-            //     mesh = mesh.CreateDual();
+        // project the vertices on a circumference
+        for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
+            mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
+        }
 
 
-            // }
+        if(!swap){
+            cout << "Trying Goldberg" << endl;
+            //mesh = mesh.CreateDual();
         }
 
        
-        // project the vertices on a circumference
-        // for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
-        //     mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
-        // }
+        
 
         if (argc == 7){
             mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));

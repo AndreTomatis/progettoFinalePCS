@@ -318,7 +318,11 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
     unsigned int face_cnt = 0;
     vector<vector<unsigned int>> old_ps(b+1);
 
+    cout << mesh.Cell2DsVertices.size() <<endl;
+
     for(size_t i = 0; i < mesh.Cell2DsVertices.size(); ++i){
+
+        old_ps.clear();
 
         for(unsigned int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
             ps[j].x = mesh.Cell0DsCoordinates(0, mesh.Cell2DsVertices[i][j]);
@@ -331,18 +335,17 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
 
         
         
-        for (unsigned int h = 0; h < b + 1; ++h) {
-
+        for (unsigned int h = 0; h <= b; ++h) {
             
             old_ps[h].resize(b-h+1); 
 
-            for (unsigned int j = 0; j < b - h + 1; ++j) {
-                cout << face_cnt << " " << edge_cnt << " " << h << " " << j << endl;
+            for (unsigned int j = 0; j <= b - h; ++j) {
 
                 Point p = ps[0] + u*h + v*j; 
-                
+
                 //store points and vertices
                 int id = get_id(p, geodetic);
+
                 if (id == -1){
                     id = id_cnt++;
                     geodetic.Cell0DsId.push_back(id);
@@ -352,39 +355,49 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                 }
                 
                 if (h > 0){
-                    int edge_id = get_edge(id, old_ps[h-1][j], geodetic);
-                    if (edge_id == -1){
+                    int edge_id_sx = get_edge(id, old_ps[h-1][j], geodetic);
+                    if (edge_id_sx == -1){
+                        edge_id_sx = edge_cnt;
                         geodetic.Cell1DsId.push_back(edge_cnt);
                         geodetic.Cell1DsExtrema(0,edge_cnt) = id;
                         geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h-1][j];
                         edge_cnt++;
                     }
 
-                    edge_id = get_edge(id, old_ps[h-1][j+1], geodetic);
-                    if (edge_id == -1){
+                    int edge_id_dx = get_edge(id, old_ps[h-1][j+1], geodetic);
+                    if (edge_id_dx == -1){
+                        edge_id_dx = edge_cnt;
                         geodetic.Cell1DsId.push_back(edge_cnt);
                         geodetic.Cell1DsExtrema(0,edge_cnt) = id;
                         geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h-1][j+1];
                         edge_cnt++;
                     }
 
-
-                }
-
-                if (j>0){
-                    int edge_id = get_edge(id, old_ps[h][j-1], geodetic);
-                    if (edge_id == -1){
+                    int edge_id_down = get_edge(old_ps[h-1][j], old_ps[h-1][j+1], geodetic);
+                    if (edge_id_down == -1){
+                        edge_id_down = edge_cnt;
                         geodetic.Cell1DsId.push_back(edge_cnt);
-                        geodetic.Cell1DsExtrema(0,edge_cnt) = id;
-                        geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h][j-1];
+                        geodetic.Cell1DsExtrema(0,edge_cnt) = old_ps[h-1][j];
+                        geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h-1][j+1];
                         edge_cnt++;
                     }
 
+                    
+                    geodetic.Cell2DsId.push_back(face_cnt);
+
+                    //geodetic.Cell2DsVertices[face_cnt].resize(3);
+                    //geodetic.Cell2DsVertices[face_cnt][0] = id;
+                    // geodetic.Cell2DsVertices[face_cnt][1] = old_ps[h-1][j];
+                    // geodetic.Cell2DsVertices[face_cnt][2] = old_ps[h-1][j+1];
+                    // geodetic.Cell2DsEdges[face_cnt].resize(3);
+                    // geodetic.Cell2DsEdges[face_cnt][0] = edge_id_sx;
+                    // geodetic.Cell2DsEdges[face_cnt][1] = edge_id_dx;
+                    // geodetic.Cell2DsEdges[face_cnt][2] = edge_id_down;
+
+                    face_cnt++;
                 }
 
                 old_ps[h][j] = id;
-                
-                
             }
             
             

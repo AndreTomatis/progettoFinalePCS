@@ -124,8 +124,8 @@ struct PolygonalMesh
 
         dual.NumCell2Ds = NumCell0Ds;
         dual.Cell2DsId.resize(dual.NumCell2Ds);
-        dual.Cell2DsVertices.resize(NumCell2Ds);
-        dual.Cell2DsEdges.resize(q*NumCell2Ds/2);
+        dual.Cell2DsVertices.resize(dual.NumCell2Ds);
+        dual.Cell2DsEdges.resize(q*dual.NumCell2Ds/2);
 
         for (unsigned int v_id = 0; v_id < NumCell0Ds; ++v_id) {
             vector<unsigned int> incident_faces;
@@ -150,8 +150,8 @@ struct PolygonalMesh
             }
 
             dual.Cell2DsId[v_id] = v_id;
-            dual.Cell2DsVertices.push_back(face_ids);
-            dual.Cell2DsEdges.push_back(edge_ids);
+            dual.Cell2DsVertices[v_id]= face_ids;
+            dual.Cell2DsEdges[v_id] = edge_ids;
         }
 
 
@@ -163,6 +163,7 @@ struct PolygonalMesh
         dual.Cell3DsVertices = {dual.Cell0DsId}; // all dual vertices
         dual.Cell3DsEdges = {dual.Cell1DsId};    // all dual edges
         dual.Cell3DsFaces.resize(1);
+        dual.Cell3DsFaces.reserve(1);
 
         for (unsigned int i = 0; i < dual.NumCell2Ds; ++i){
             dual.Cell3DsFaces[0].push_back(i);

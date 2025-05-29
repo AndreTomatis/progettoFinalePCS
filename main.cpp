@@ -58,8 +58,7 @@ int main(int argc, char* argv[])
 
         unsigned int T = b*b + b*c + c*c;
 
-        //mesh = Triangulation_1(mesh, b, T);
-
+        mesh = Triangulation_1(mesh, b, T);
 
         // project the vertices on a circumference
         for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
@@ -69,7 +68,7 @@ int main(int argc, char* argv[])
 
         if(!swap){
             cout << "Trying Goldberg" << endl;
-            //mesh = mesh.CreateDual();
+            mesh = mesh.CreateDual();
         }
 
        

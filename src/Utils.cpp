@@ -308,19 +308,16 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
     geodetic.Cell1DsId.reserve(geodetic.NumCell1Ds);
     geodetic.Cell1DsExtrema = Eigen::MatrixXi(2, geodetic.NumCell1Ds);
     
-    
-    geodetic.Cell2DsId.reserve(geodetic.NumCell2Ds);
+    geodetic.Cell2DsId.resize(geodetic.NumCell2Ds);
     geodetic.Cell2DsVertices.resize(geodetic.NumCell2Ds);
-    geodetic.Cell2DsEdges.reserve(geodetic.NumCell2Ds);
+    geodetic.Cell2DsEdges.resize(geodetic.NumCell2Ds);
 
     unsigned int id_cnt = 0;
     unsigned int edge_cnt = 0;
     unsigned int face_cnt = 0;
     vector<vector<unsigned int>> old_ps(b+1);
 
-    cout << mesh.Cell2DsVertices.size() <<endl;
-
-    for(size_t i = 0; i < mesh.Cell2DsVertices.size(); ++i){
+    for(size_t i = 0; i < mesh.NumCell2Ds; ++i){
 
         old_ps.clear();
 
@@ -381,18 +378,16 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                         geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h-1][j+1];
                         edge_cnt++;
                     }
-
                     
-                    geodetic.Cell2DsId.push_back(face_cnt);
-
-                    //geodetic.Cell2DsVertices[face_cnt].resize(3);
-                    //geodetic.Cell2DsVertices[face_cnt][0] = id;
-                    // geodetic.Cell2DsVertices[face_cnt][1] = old_ps[h-1][j];
-                    // geodetic.Cell2DsVertices[face_cnt][2] = old_ps[h-1][j+1];
-                    // geodetic.Cell2DsEdges[face_cnt].resize(3);
-                    // geodetic.Cell2DsEdges[face_cnt][0] = edge_id_sx;
-                    // geodetic.Cell2DsEdges[face_cnt][1] = edge_id_dx;
-                    // geodetic.Cell2DsEdges[face_cnt][2] = edge_id_down;
+                    geodetic.Cell2DsId[face_cnt] = face_cnt;
+                    geodetic.Cell2DsVertices[face_cnt].resize(3);
+                    geodetic.Cell2DsVertices[face_cnt][0] = id;
+                    geodetic.Cell2DsVertices[face_cnt][1] = old_ps[h-1][j];
+                    geodetic.Cell2DsVertices[face_cnt][2] = old_ps[h-1][j+1];
+                    geodetic.Cell2DsEdges[face_cnt].resize(3);
+                    geodetic.Cell2DsEdges[face_cnt][0] = edge_id_sx;
+                    geodetic.Cell2DsEdges[face_cnt][1] = edge_id_dx;
+                    geodetic.Cell2DsEdges[face_cnt][2] = edge_id_down;
 
                     face_cnt++;
                 }

@@ -78,22 +78,22 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
 
 
     for(const auto& pair : path){
-        for(unsigned int i = 0 ; i <= NumCell1Ds; ++i){
+        for(unsigned int i = 0 ; i <= mesh.NumCell1Ds; ++i){
 
-            if(mesh.Cell1DsExtrema[i].first == pair.first && mesh.Cell1DsExtrema[i].second == pair.second){
-                if(mesh.ShortestPath.find(1) =! mesh.ShortestPath.end()){
+            if(mesh.Cell1DsExtrema(i,0) == pair.first && mesh.Cell1DsExtrema(i,1) == pair.second){
+                if(mesh.ShortestPath.find(1) != mesh.ShortestPath.end()){
                     mesh.ShortestPath[1].push_back(i);
                 }else{
                     mesh.ShortestPath.insert({1, {i}});
                 }
-            }else if(mesh.Cell1DsExtrema[i].first == pair.second && mesh.Cell1DsExtrema[i].second == pair.first){
-                if(mesh.ShortestPath.find(1) =! mesh.ShortestPath.end()){
+            }else if(mesh.Cell1DsExtrema(i,0) == pair.second && mesh.Cell1DsExtrema(i,1) == pair.first){
+                if(mesh.ShortestPath.find(1) != mesh.ShortestPath.end()){
                     mesh.ShortestPath[1].push_back(i);
                 }else{
                     mesh.ShortestPath.insert({1, {i}});
                 }
             }else{
-                if(mesh.ShortestPath.find(0) =! mesh.ShortestPath.end()){
+                if(mesh.ShortestPath.find(0) != mesh.ShortestPath.end()){
                     mesh.ShortestPath[0].push_back(i);
                 }else{
                     mesh.ShortestPath.insert({0, {i}});

@@ -89,6 +89,9 @@ int main(int argc, char* argv[])
         utilities.ExportSegments("./Cell1Ds.inp",
                                  mesh.Cell0DsCoordinates,
                                  mesh.Cell1DsExtrema);
+        utilities.ExportPolygons("./Cell2Ds.inp",
+                                 mesh.Cell0DsCoordinates,
+                                 mesh.Cell2DsVertices);
 
 
     }else{

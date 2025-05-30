@@ -68,7 +68,9 @@ struct PolygonalMesh
 
         map<pair<unsigned int, unsigned int>, vector<unsigned int>> edge_to_faces; // key is a pair of vertex Ids defining each edge, with vector of face Ids adjacent to that edge
 
-        for (unsigned int f_id = 0; f_id < NumCell2Ds; ++f_id) {
+        for (unsigned int f_id = 0; f_id < Cell2DsVertices.size();++f_id) {
+
+            
 
             const auto& edge_ids = Cell2DsEdges[f_id];
             // const auto& vertex_ids = Cell2DsVertices[f_id];
@@ -83,7 +85,10 @@ struct PolygonalMesh
                 auto key = minmax(v0, v1); // reorders in consistent (min, max) order
 
                 edge_to_faces[key].push_back(f_id);
+            
+                    
             }
+            
         }
 
 
@@ -96,18 +101,23 @@ struct PolygonalMesh
         unsigned int dual_edge_id = 0;
 
         for (const auto& ef : edge_to_faces) {
-
             const auto& faces = ef.second;
 
-            unsigned int f1 = faces[0];
-            unsigned int f2 = faces[1];
-            edge_pairs.emplace_back(f1, f2); // push_back?
+            if (faces.size() < 2) continue;
 
-            edge_index_map[{f1, f2}] = dual_edge_id;
-            edge_index_map[{f2, f1}] = dual_edge_id;
+            for (size_t i = 0; i < faces.size(); ++i) {
+                for (size_t j = i + 1; j < faces.size(); ++j) {
+                    unsigned int f1 = faces[i];
+                    unsigned int f2 = faces[j];
 
-            dual_edge_id++;
-            
+                    if (edge_index_map.count({f1, f2}) == 0) {
+                        edge_pairs.emplace_back(f1, f2);
+                        edge_index_map[{f1, f2}] = dual_edge_id;
+                        edge_index_map[{f2, f1}] = dual_edge_id;
+                        dual_edge_id++;
+                    }
+                }
+            }
         }
 
         dual.NumCell1Ds = edge_pairs.size();
@@ -115,7 +125,7 @@ struct PolygonalMesh
         dual.Cell1DsExtrema = MatrixXi(2, dual.NumCell1Ds);
 
         for (unsigned int i = 0; i < edge_pairs.size(); ++i) {
-            dual.Cell1DsId[i] = i;
+            dual.Cell1DsId[i] = edge_index_map[{edge_pairs[i].first, edge_pairs[i].second}];
             dual.Cell1DsExtrema(0, i) = edge_pairs[i].first;
             dual.Cell1DsExtrema(1, i) = edge_pairs[i].second;
         }

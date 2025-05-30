@@ -131,13 +131,13 @@ int main() {
     }
 
     
-    cout << "punti contorno AB:\n";
+    cout << "punti contorno AB:" << endl;
     for (Point p: puntiAB)
-        std::cout << p.x << ' '<< p.y << ' '<< p.z << '\n';
-    cout << "punti contorno ACB:\n";
+        std::cout << p.x << ' '<< p.y << ' '<< p.z << endl;
+    cout << "punti contorno ACB:" << endl;
     for (Point p: puntiACB)
-        std::cout << p.x << ' '<< p.y << ' '<< p.z << '\n';
-    cout << "Punti interni\n";
+        std::cout << p.x << ' '<< p.y << ' '<< p.z << endl;
+    cout << "Punti interni" << endl;
     for (Point p: newpunti)
-        std::cout << p.x << ' '<< p.y << ' '<< p.z << '\n';
+        std::cout << p.x << ' '<< p.y << ' '<< p.z << endl;
 }

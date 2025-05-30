@@ -403,7 +403,23 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                             edge_cnt++;
                         }
 
+                        int edge_id_dx = get_edge(old_ps[h-1][j], id, geodetic);
+                        if (edge_id_dx == -1){
+                            edge_id_dx = edge_cnt;
+                            geodetic.Cell1DsId.push_back(edge_cnt);
+                            geodetic.Cell1DsExtrema(0,edge_cnt) = id;
+                            geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h][j-1];
+                            edge_cnt++;
+                        }
+
                         int edge_id_sx = get_edge(old_ps[h-1][j], old_ps[h][j-1], geodetic);
+                        if (edge_id_sx == -1){
+                            edge_id_sx = edge_cnt;
+                            geodetic.Cell1DsId.push_back(edge_cnt);
+                            geodetic.Cell1DsExtrema(0,edge_cnt) = id;
+                            geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h][j-1];
+                            edge_cnt++;
+                        }
 
                         geodetic.Cell2DsId[face_cnt] = face_cnt;
                         geodetic.Cell2DsVertices[face_cnt].resize(3);

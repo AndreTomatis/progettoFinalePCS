@@ -32,13 +32,13 @@ int main(int argc, char* argv[])
         PolygonalMesh mesh(p,q);
 
 
-        if(q==3)
+        if(q==3 && p != 3)
         {
             filename += "./p" + to_string(p) + "q" + to_string(q) + "/";
         }
 
 
-        if (p == 3 && q != 3){
+        if (p == 3){
             filename += "./p" + to_string(q) + "q" + to_string(p) + "/";
             mesh.p = q;
             mesh.q = 3;
@@ -71,7 +71,10 @@ int main(int argc, char* argv[])
             mesh = mesh.CreateDual();
         }
 
-       
+        // project the vertices on a circumference
+        for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
+            mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
+        }
         
 
         if (argc == 7){
@@ -89,7 +92,8 @@ int main(int argc, char* argv[])
         utilities.ExportSegments("./Cell1Ds.inp",
                                  mesh.Cell0DsCoordinates,
                                  mesh.Cell1DsExtrema);
-        utilities.ExportPolygons("./Cell2Ds.inp",
+        
+        if (p == 3) utilities.ExportPolygons("./Cell2Ds.inp",
                                  mesh.Cell0DsCoordinates,
                                  mesh.Cell2DsVertices);
 

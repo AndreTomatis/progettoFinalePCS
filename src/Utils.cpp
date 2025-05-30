@@ -390,8 +390,34 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                     geodetic.Cell2DsEdges[face_cnt][0] = edge_id_sx;
                     geodetic.Cell2DsEdges[face_cnt][1] = edge_id_dx;
                     geodetic.Cell2DsEdges[face_cnt][2] = edge_id_down;
-
                     face_cnt++;
+                    if (j > 0){
+
+                        int edge_id_orizontal = get_edge(id, old_ps[h][j-1], geodetic);
+
+                        if (edge_id_orizontal == -1){
+                            edge_id_orizontal = edge_cnt;
+                            geodetic.Cell1DsId.push_back(edge_cnt);
+                            geodetic.Cell1DsExtrema(0,edge_cnt) = id;
+                            geodetic.Cell1DsExtrema(1,edge_cnt) = old_ps[h][j-1];
+                            edge_cnt++;
+                        }
+
+                        int edge_id_sx = get_edge(old_ps[h-1][j], old_ps[h][j-1], geodetic);
+
+                        geodetic.Cell2DsId[face_cnt] = face_cnt;
+                        geodetic.Cell2DsVertices[face_cnt].resize(3);
+                        geodetic.Cell2DsVertices[face_cnt][0] = id;
+                        geodetic.Cell2DsVertices[face_cnt][1] = old_ps[h-1][j];
+                        geodetic.Cell2DsVertices[face_cnt][2] = old_ps[h][j-1];
+                        geodetic.Cell2DsEdges[face_cnt].resize(3);
+                        geodetic.Cell2DsEdges[face_cnt][0] = edge_id_sx;
+                        geodetic.Cell2DsEdges[face_cnt][1] = edge_id_dx;
+                        geodetic.Cell2DsEdges[face_cnt][2] = edge_id_orizontal;
+                        face_cnt++;
+                    }
+
+                    
                 }
 
                 old_ps[h][j] = id;
@@ -401,6 +427,19 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
         }
         
         
+    }
+
+    // store last few things in Cell3Ds
+
+    geodetic.NumCell3Ds = 1;
+    geodetic.Cell3DsId = {0};
+    geodetic.Cell3DsVertices = {geodetic.Cell0DsId}; // all geodetic vertices
+    geodetic.Cell3DsEdges = {geodetic.Cell1DsId};    // all geodetic edges
+    geodetic.Cell3DsFaces.resize(1);
+    geodetic.Cell3DsFaces.reserve(1);
+
+    for (unsigned int i = 0; i < geodetic.NumCell2Ds; ++i){
+        geodetic.Cell3DsFaces[0].push_back(i);
     }
 
 

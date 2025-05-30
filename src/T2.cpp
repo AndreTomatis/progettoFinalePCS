@@ -1,4 +1,8 @@
+#include <iostream>
 #include <vector>
+#include <iomanip>
+
+using namespace std;
 
 struct Point {
     double x, y, z;
@@ -22,10 +26,6 @@ Point normalize(const Point& v) {
 }
 
 
-struct Edge{
-    Point x1,x2;
-
-}
 
 double distanza(const Point& a, const Point& b) {
     return sqrt(
@@ -36,9 +36,9 @@ double distanza(const Point& a, const Point& b) {
 }
 Point midpoints(const Point& A, const Point& B, int nsez, int n) {
     return {
-        (A.x+B.x)*n/nsez,
-        (A.y+B.y)*n/nsez,
-        (A.z+B.z)*n/nsez
+        A.x + (B.x - A.x) * static_cast<double>(n) / nsez,
+        A.y + (B.y - A.y) * static_cast<double>(n) / nsez,
+        A.z + (B.z - A.z) * static_cast<double>(n) / nsez
     };
 }
 
@@ -46,34 +46,59 @@ Point midpoints(const Point& A, const Point& B, int nsez, int n) {
 int main() {
     Point A, B, C;
     int b;
+
+    std::cout << "Inserisci coordinate A (x y z): ";
+    std::cin >> A.x >> A.y >> A.z;
+    std::cout << "Inserisci coordinate B (x y z): ";
+    std::cin >> B.x >> B.y >> B.z;
+    std::cout << "Inserisci coordinate C (x y z): ";
+    std::cin >> C.x >> C.y >> C.z;
+    std::cout << "Numero di b: ";
+    std::cin >> b;
+
      //---------CALCOLO--LE--DIREZIONI------
     Point mab=midpoints(A,B,2,1);
     Point mac=midpoints(A,C,2,1);
     Point mbc=midpoints(B,C,2,1);
 
-    Point dirR0;
+ 
     Point dirR1;
-    Point dirR2;
-    //calcolo dir retta verso destra(denominata R1)
-    dirR0 = {mbc.x - A.x, mbc.y - A.y, mbc.z - A.z};
+
+
     //calcolo dir retta verticale(denominata R2)
-    dirR1 = {mab.x - C.x, mab.y - C.y, mab.z - C.z};
-    //calcolo dir retta verso sinistra(denominata R3)
-    dirR2 = {mbc.x - B.x, mbc.y - B.y, mbc.z - B.z};
-
-
+    dirR1.x=mab.x - C.x;
+    dirR1.y=mab.y - C.y;
+    dirR1.z=mab.z - C.z;
 
 
     
     
     //ora calcolo in base a b i midpoints sui lati
-    vector<Point> punti;
+    vector<Point> puntiAB;
     //Lato AB
-    punti.push_back(A);
+    puntiAB.push_back(A);
     for(int j=1; j<b*2; ++j){
-        punti.push_back(midpoints(A,B,b*2,j));
+        puntiAB.push_back(midpoints(A,B,b*2,j));
     }
-    punti.push_back(B);
+    puntiAB.push_back(B);
+
+    //CALCOLO I PUNTI SUI SEGMENTI ACB (SENZA AB COME LATO)
+    vector<Point> puntiACB;
+    //Lato AB
+    puntiACB.push_back(A);
+    for(int j=1; j<b*2; ++j){
+        puntiACB.push_back(midpoints(A,C,b*2,j));
+    }
+    puntiACB.push_back(C);
+
+    //ora aggiungo i punti su CB 
+
+    for(int j=1; j<b*2; ++j){
+        puntiACB.push_back(midpoints(C,B,b*2,j));
+    }
+    puntiACB.push_back(B);
+
+
 
     //creazione nuovi punti tramite le direzioni sul lato AB
     //ciclo per verticali
@@ -82,59 +107,37 @@ int main() {
     //h è sqrt(3)/2 * lato
     //quindi sommo sempre alternando 2/3h ovvero 1/sqrt(3) di l
     //il lato è la distanza tra 2 punti dello stesso lato che hanno solo 1 punto in mezzo
-    double latoTriPicc=distanza(punti(0),punti(2));
-    double saltovert= (1/sqrt(3))*latoTriPicc;
+    double latoTriPicc=distanza(puntiAB[0],puntiAB[2]);
+    double salto= (1/sqrt(3))*latoTriPicc;
     
     vector<Point> newpunti;
     //righe verticali
-    for(int j=1; j<vector.size()/2; j=j+2){
+    for(int j=2; j<puntiACB.size()-1; j=j+2){
         //prendo il punto
         bool gira=true;
-        
+        int c=1;
         while(gira){
-            Point dirNorm = normalize(dirR2);
-            newpunti.push_back(punti[j]+ dirNorm * salto);
-            
 
-            //controllo x uscire
-            if()//come fare a sapere quando fermarsi?
-                gira=false;
-        }
-        
-    }
-    //righe diagonali dx --- distanza di salto è uguale all altezza (è solo un altezza ruotata)
-    for(int j=0; j<vector.size()/2; j=j+2){
-        //prendo il punto
-        bool gira=true;
-        
-        while(gira){
             Point dirNorm = normalize(dirR1);
-            newpunti.push_back(punti[j]+ dirNorm * salto);
+            newpunti.push_back(puntiACB[j]+ dirNorm * salto * c);
             
 
             //controllo x uscire
-            if()//come fare a sapere quando fermarsi?
+            if(distanza(puntiAB[j/2], newpunti[newpunti.size()-1])<salto)//come fare a sapere quando fermarsi?
                 gira=false;
+            c=c+1;
         }
         
     }
-    //righe diagonali sx --- distanza di salto è uguale all altezza (è solo un altezza ruotata)
-    for(int j=vector.size()/2; j>0; j=j-2){
-        //prendo il punto
-        bool gira=true;
-        
-        while(gira){
-            Point dirNorm = normalize(dirR3);
-            newpunti.push_back(punti[j]+ dirNorm * salto);
-            
-
-            //controllo x uscire
-            if()//come fare a sapere quando fermarsi?
-                gira=false;
-        }
-        
-    }
-
 
     
+    cout << "punti contorno AB:" << endl;
+    for (Point p: puntiAB)
+        std::cout << p.x << ' '<< p.y << ' '<< p.z << endl;
+    cout << "punti contorno ACB:" << endl;
+    for (Point p: puntiACB)
+        std::cout << p.x << ' '<< p.y << ' '<< p.z << endl;
+    cout << "Punti interni" << endl;
+    for (Point p: newpunti)
+        std::cout << p.x << ' '<< p.y << ' '<< p.z << endl;
 }

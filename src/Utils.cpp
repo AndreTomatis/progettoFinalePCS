@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <list>
 
 
 namespace PolygonalLibrary
@@ -116,7 +117,8 @@ bool ImportCell1Ds(PolygonalMesh& mesh, string filename)
         converter >> id >>  delimiter >> mesh.Cell1DsExtrema(0, id) >> delimiter >>  mesh.Cell1DsExtrema(1, id);
         mesh.Cell1DsId.push_back(id);
     }
-
+    
+    
     return true;
 }
 

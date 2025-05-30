@@ -27,17 +27,6 @@ vector<vector<unsigned int>> AdjList(const Eigen::MatrixXi& edges, unsigned int 
 }
 
 
-
-// colours a given path on our mesh by markers
-void ColourPath(PolygonalMesh &mesh, const vector<pair<unsigned int, unsigned int>> &path){
-
-    PolygonalMesh ColouredMesh = mesh;
-
-    return;
-}
-
-
-
 // Dijkstra's algorithm on our mesh
 PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsigned int& dest){
 
@@ -69,7 +58,8 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
     }
 
 
-    // remember shortest path node pairs
+    // store shortest path
+
     vector<pair<unsigned int, unsigned int>> path;
     if (dist[dest] == INT_MAX){
         cout << "error" << endl;
@@ -82,11 +72,37 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
     reverse(path.begin(), path.end());
 
     cout << "Path:" << endl;
-    for (const auto& p : path) {
+    for (const auto& p : path){
         cout << "(" << p.first << ", " << p.second << ")" << endl;
     }
 
-    ColourPath(mesh, path);
+
+    for(const auto& pair : path){
+        for(unsigned int i = 0 ; i <= NumCell1Ds; ++i){
+
+            if(mesh.Cell1DsExtrema[i].first == pair.first && mesh.Cell1DsExtrema[i].second == pair.second){
+                if(mesh.ShortestPath.find(1) =! mesh.ShortestPath.end()){
+                    mesh.ShortestPath[1].push_back(i);
+                }else{
+                    mesh.ShortestPath.insert({1, {i}});
+                }
+            }else if(mesh.Cell1DsExtrema[i].first == pair.second && mesh.Cell1DsExtrema[i].second == pair.first){
+                if(mesh.ShortestPath.find(1) =! mesh.ShortestPath.end()){
+                    mesh.ShortestPath[1].push_back(i);
+                }else{
+                    mesh.ShortestPath.insert({1, {i}});
+                }
+            }else{
+                if(mesh.ShortestPath.find(0) =! mesh.ShortestPath.end()){
+                    mesh.ShortestPath[0].push_back(i);
+                }else{
+                    mesh.ShortestPath.insert({0, {i}});
+                }
+            }
+
+        }
+    }
+    
     return mesh;
 }
 

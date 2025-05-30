@@ -87,7 +87,7 @@ int main() {
     
     vector<Point> newpunti;
     //righe verticali
-    for(int j=1; j<vector.size()/2; j=j+2){
+    for(int j=1; j<punti.size()/2; j=j+2){
         //prendo il punto
         bool gira=true;
         
@@ -102,39 +102,6 @@ int main() {
         }
         
     }
-    //righe diagonali dx --- distanza di salto è uguale all altezza (è solo un altezza ruotata)
-    for(int j=0; j<vector.size()/2; j=j+2){
-        //prendo il punto
-        bool gira=true;
-        
-        while(gira){
-            Point dirNorm = normalize(dirR1);
-            newpunti.push_back(punti[j]+ dirNorm * salto);
-            
-
-            //controllo x uscire
-            if()//come fare a sapere quando fermarsi?
-                gira=false;
-        }
-        
-    }
-    //righe diagonali sx --- distanza di salto è uguale all altezza (è solo un altezza ruotata)
-    for(int j=vector.size()/2; j>0; j=j-2){
-        //prendo il punto
-        bool gira=true;
-        
-        while(gira){
-            Point dirNorm = normalize(dirR3);
-            newpunti.push_back(punti[j]+ dirNorm * salto);
-            
-
-            //controllo x uscire
-            if()//come fare a sapere quando fermarsi?
-                gira=false;
-        }
-        
-    }
-
 
     
 }

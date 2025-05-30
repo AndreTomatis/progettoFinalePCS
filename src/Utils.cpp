@@ -401,6 +401,19 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
         
     }
 
+    // store last few things in Cell3Ds
+
+    geodetic.NumCell3Ds = 1;
+    geodetic.Cell3DsId = {0};
+    geodetic.Cell3DsVertices = {geodetic.Cell0DsId}; // all geodetic vertices
+    geodetic.Cell3DsEdges = {geodetic.Cell1DsId};    // all geodetic edges
+    geodetic.Cell3DsFaces.resize(1);
+    geodetic.Cell3DsFaces.reserve(1);
+
+    for (unsigned int i = 0; i < geodetic.NumCell2Ds; ++i){
+        geodetic.Cell3DsFaces[0].push_back(i);
+    }
+
 
     return geodetic;
 }

@@ -58,8 +58,7 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
     }
 
 
-    // store shortest path
-
+    // store shortest path nodes and edges
     vector<pair<unsigned int, unsigned int>> path;
     if (dist[dest] == INT_MAX){
         cout << "error" << endl;
@@ -77,33 +76,62 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
     }
 
 
+    // store shortest path into our mesh struct
     for(const auto& pair : path){
+
+        // store shortest path edges
         for(unsigned int i = 0 ; i <= mesh.NumCell1Ds; ++i){
 
-            if(mesh.Cell1DsExtrema(i,0) == pair.first && mesh.Cell1DsExtrema(i,1) == pair.second){
-                if(mesh.ShortestPath.find(1) != mesh.ShortestPath.end()){
-                    mesh.ShortestPath[1].push_back(i);
+            cout << "Checking edge: " << pair.first << " " << pair.second << endl;
+
+            if(mesh.Cell1DsExtrema(0,i) == pair.first && mesh.Cell1DsExtrema(1,i) == pair.second){
+                if(mesh.ShortestPathEdges.find(1) != mesh.ShortestPathEdges.end()){
+                    mesh.ShortestPathEdges[1].push_back(i);
                 }else{
-                    mesh.ShortestPath.insert({1, {i}});
+                    mesh.ShortestPathEdges.insert({1, {i}});
                 }
-            }else if(mesh.Cell1DsExtrema(i,0) == pair.second && mesh.Cell1DsExtrema(i,1) == pair.first){
-                if(mesh.ShortestPath.find(1) != mesh.ShortestPath.end()){
-                    mesh.ShortestPath[1].push_back(i);
+            }else if(mesh.Cell1DsExtrema(0,i) == pair.second && mesh.Cell1DsExtrema(1,i) == pair.first){
+                if(mesh.ShortestPathEdges.find(1) != mesh.ShortestPathEdges.end()){
+                    mesh.ShortestPathEdges[1].push_back(i);
                 }else{
-                    mesh.ShortestPath.insert({1, {i}});
+                    mesh.ShortestPathEdges.insert({1, {i}});
                 }
             }else{
-                if(mesh.ShortestPath.find(0) != mesh.ShortestPath.end()){
-                    mesh.ShortestPath[0].push_back(i);
+                if(mesh.ShortestPathEdges.find(0) != mesh.ShortestPathEdges.end()){
+                    mesh.ShortestPathEdges[0].push_back(i);
                 }else{
-                    mesh.ShortestPath.insert({0, {i}});
+                    mesh.ShortestPathEdges.insert({0, {i}});
                 }
             }
+        }
+    
+        // store shortest path nodes
+        for(unsigned int n = 0; n <= mesh.NumCell0Ds; ++n){
 
+            cout << "Checking node: " << n << endl;
+
+            if(mesh.Cell0DsId[n] == pair.first || mesh.Cell0DsId[n] == pair.second){
+                if(mesh.ShortestPathNodes.find(1) != mesh.ShortestPathNodes.end()){
+                    if(mesh.ShortestPathNodes[1].back() != mesh.Cell0DsId[n]){
+                        mesh.ShortestPathNodes[1].push_back(n);
+                    }
+                }else{
+                    mesh.ShortestPathNodes.insert({1, {n}});
+                }
+            }else{
+                if(mesh.ShortestPathNodes.find(0) != mesh.ShortestPathNodes.end()){
+                    if(mesh.ShortestPathNodes[0].back() != mesh.Cell0DsId[n]){
+                        mesh.ShortestPathNodes[0].push_back(n);
+                    }
+                }else{
+                    mesh.ShortestPathNodes.insert({0, {n}});
+                }
+            }
         }
     }
-    
+
     return mesh;
-}
+
+} //Dijkstra end
 
 } //namespace end

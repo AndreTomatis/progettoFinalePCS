@@ -32,7 +32,8 @@ struct PolygonalMesh
     vector<vector<unsigned int>> Cell3DsEdges;
     vector<vector<unsigned int>> Cell3DsFaces;
 
-    std::map<unsigned int, list<unsigned int>> ShortestPath = {};
+    std::map<unsigned int, list<unsigned int>> ShortestPathNodes = {};
+    std::map<unsigned int, list<unsigned int>> ShortestPathEdges = {};
 
 
     PolygonalMesh(unsigned int p, unsigned int q) : p(p), q(q) {}

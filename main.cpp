@@ -88,7 +88,6 @@ int main(int argc, char* argv[])
         UCDUtilities utilities;
 
         // export nodes
-        {
         vector<Gedim::UCDProperty<double>> cell0Ds_properties(1);
 
         cell0Ds_properties[0].Label = "Marker";
@@ -105,11 +104,10 @@ int main(int argc, char* argv[])
         utilities.ExportPoints("./Cell0Ds.inp",
                                mesh.Cell0DsCoordinates,
                                cell0Ds_properties);
-        }
+        
         
 
         // export edges
-        {
         vector<Gedim::UCDProperty<double>> cell1Ds_properties(1);
 
         cell1Ds_properties[0].Label = "Marker";
@@ -128,9 +126,10 @@ int main(int argc, char* argv[])
                                  mesh.Cell1DsExtrema,
                                  {},
                                  cell1Ds_properties);
-        }
+        
+                                 
 
-
+        // export polygon
         if (p == 3) utilities.ExportPolygons("./Cell2Ds.inp",
                                  mesh.Cell0DsCoordinates,
                                  mesh.Cell2DsVertices);

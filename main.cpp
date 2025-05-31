@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
                                  {},
                                  cell1Ds_properties);
         
-                                 
+
 
         // export polygon
         if (p == 3) utilities.ExportPolygons("./Cell2Ds.inp",

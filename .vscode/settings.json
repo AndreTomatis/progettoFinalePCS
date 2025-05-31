@@ -17,6 +17,7 @@
         "__tree": "cpp",
         "algorithm": "cpp",
         "map": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "utility": "cpp"
     }
 }

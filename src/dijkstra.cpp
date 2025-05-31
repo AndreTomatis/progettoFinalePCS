@@ -74,6 +74,8 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
     for (const auto& p : path){
         cout << "(" << p.first << ", " << p.second << ")" << endl;
     }
+    cout << "Path edges: " << path.size() << endl;
+
 
 
     // store shortest path into our mesh struct

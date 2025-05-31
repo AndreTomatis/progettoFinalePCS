@@ -80,17 +80,19 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
     for(const auto& pair : path){
 
         // store shortest path edges
-        for(unsigned int i = 0 ; i <= mesh.NumCell1Ds; ++i){
+        for(unsigned int i = 0 ; i < mesh.NumCell1Ds; ++i){
 
-            cout << "Checking edge: " << pair.first << " " << pair.second << endl;
+            cout << "Checking edge: " << pair.first << " " << pair.second << " testing: " << i << endl;
 
             if(mesh.Cell1DsExtrema(0,i) == pair.first && mesh.Cell1DsExtrema(1,i) == pair.second){
+                cout << "yes" << endl;
                 if(mesh.ShortestPathEdges.find(1) != mesh.ShortestPathEdges.end()){
                     mesh.ShortestPathEdges[1].push_back(i);
                 }else{
                     mesh.ShortestPathEdges.insert({1, {i}});
                 }
             }else if(mesh.Cell1DsExtrema(0,i) == pair.second && mesh.Cell1DsExtrema(1,i) == pair.first){
+                cout << "yes" << endl;
                 if(mesh.ShortestPathEdges.find(1) != mesh.ShortestPathEdges.end()){
                     mesh.ShortestPathEdges[1].push_back(i);
                 }else{
@@ -106,7 +108,7 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
         }
     
         // store shortest path nodes
-        for(unsigned int n = 0; n <= mesh.NumCell0Ds; ++n){
+        for(unsigned int n = 0; n < mesh.NumCell0Ds; ++n){
 
             cout << "Checking node: " << n << endl;
 
@@ -114,9 +116,11 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
                 if(mesh.ShortestPathNodes.find(1) != mesh.ShortestPathNodes.end()){
                     if(mesh.ShortestPathNodes[1].back() != mesh.Cell0DsId[n]){
                         mesh.ShortestPathNodes[1].push_back(n);
+                        cout << "yes" << endl;
                     }
                 }else{
                     mesh.ShortestPathNodes.insert({1, {n}});
+                    cout << "yes" << endl;
                 }
             }else{
                 if(mesh.ShortestPathNodes.find(0) != mesh.ShortestPathNodes.end()){

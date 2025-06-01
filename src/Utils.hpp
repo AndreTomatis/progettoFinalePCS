@@ -14,6 +14,8 @@ struct Point {
     Point operator+(const Point& other) const { return {x + other.x, y + other.y, z + other.z}; }
     Point operator*(double s) const { return {x * s, y * s, z * s}; }
     Point operator-(const Point& other) const { return {x - other.x, y - other.y, z - other.z}; }
+    Point operator/(double s) const { return  {x/s, y/s, z/s}; }
+    double norm(){return sqrt(x * x + y * y + z * z); }
 };
 /// Import the triangular mesh and test if the mesh is correct
 /// mesh: a TriangularMesh struct
@@ -47,4 +49,7 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
 int get_id(Point p, PolygonalMesh geodetic);
 int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic);
 
+PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T);
+
+void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt);
 }

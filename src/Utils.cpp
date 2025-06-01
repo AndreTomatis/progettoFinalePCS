@@ -272,7 +272,7 @@ bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned in
 {
     return (p <= 5 && p >= 3 &&
             q <= 5 && q >= 3 &&
-            ((b >= 1 && c == 0) || (b == 0 && c >= 1)) &&
+            ((b >= 1 && c == 0) || (b == 0 && c >= 1) || (b==c)) &&
             (p == 3 || q == 3)
             );
 }
@@ -463,9 +463,85 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
 }
 
 
+
+PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T){
+
+    PolygonalMesh geodetic(mesh.p, mesh.q);
+    Point ps[3];
+
+    switch (mesh.q)
+    {
+    case 3:
+        geodetic.NumCell0Ds = 1000;
+        geodetic.NumCell1Ds = 1000;
+        geodetic.NumCell2Ds = 4*T;
+        break;
+    case 4:
+        geodetic.NumCell0Ds = 1000;
+        geodetic.NumCell1Ds = 10000;
+        geodetic.NumCell2Ds = 8*T;
+        break;
+    case 5:
+        geodetic.NumCell0Ds = 1000;
+        geodetic.NumCell1Ds = 10000;
+        geodetic.NumCell2Ds = 20*T;
+        break;
+    }
+
+    
+    geodetic.Cell0DsId.reserve(geodetic.NumCell0Ds);
+    geodetic.Cell0DsCoordinates = Eigen::MatrixXd::Zero(3, geodetic.NumCell0Ds);
+    
+    
+    geodetic.Cell1DsId.reserve(geodetic.NumCell1Ds);
+    geodetic.Cell1DsExtrema = Eigen::MatrixXi(2, geodetic.NumCell1Ds);
+    
+    geodetic.Cell2DsId.resize(geodetic.NumCell2Ds);
+    geodetic.Cell2DsVertices.resize(geodetic.NumCell2Ds);
+    geodetic.Cell2DsEdges.resize(geodetic.NumCell2Ds);
+
+    unsigned int id_cnt = 0;
+    unsigned int edge_cnt = 0;
+    unsigned int face_cnt = 0;
+    unsigned int vertex_cnt = 0;
+    vector<vector<unsigned int>> old_ps(b+1);
+
+    for(size_t i = 0; i < 3; ++i){
+        for(unsigned int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
+            
+            ps[j].x = mesh.Cell0DsCoordinates(0, mesh.Cell2DsVertices[i][j]);
+            ps[j].y = mesh.Cell0DsCoordinates(1, mesh.Cell2DsVertices[i][j]);
+            ps[j].z = mesh.Cell0DsCoordinates(2, mesh.Cell2DsVertices[i][j]);
+        }
+        
+        Point u = (ps[2] - ps[1]) * (1.0 / (2 * b)); // Vettore da B verso C
+        Point v = (ps[2] - ps[0]) * (1.0 / (2 * b)); // Vettore da A verso C
+        Point z = (ps[1] - ps[0]) * (1.0 / (2 * b)); // Vettore da A verso B
+
+
+        Point center = (ps[0] + ps[1] + ps[2]) / 3;
+        Point r1 = (center - ps[1]) / b;
+        Point r2 = (center - ps[0]) / b;
+        Point r3 = (center - ps[2]) / b;
+
+        side(geodetic, ps[1], u, r3, r1, b, vertex_cnt, edge_cnt);
+        side(geodetic, ps[0], v, r3, r2, b, vertex_cnt, edge_cnt);
+        side(geodetic, ps[0], z, r1, r2, b, vertex_cnt, edge_cnt);
+
+
+        cout << vertex_cnt<<endl;
+    }
+
+
+    return geodetic;
+
+}
+
+
+
 int get_id(Point p, PolygonalMesh geodetic)
 {
-    for (unsigned int i =0; i < geodetic.Cell0DsCoordinates.cols(); i++){
+    for (unsigned int i =0; i < geodetic.NumCell2Ds; i++){
         if (abs(p.x - geodetic.Cell0DsCoordinates(0,i)) <= 0.0001
             && abs(p.y - geodetic.Cell0DsCoordinates(1,i)) <= 0.0001
             && abs(p.z - geodetic.Cell0DsCoordinates(2,i)) <= 0.0001){
@@ -485,6 +561,92 @@ int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic)
         }
     }
     return -1;
+}
+
+
+void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt){
+    int prev = -1;
+    for (int h = 0; h < 2*b + 1; h++){
+        Point p = p0 + (u * h);
+        int id = get_id(p, geodetic);
+        if (id == -1){
+            id = vertex_cnt;
+            geodetic.Cell0DsId.push_back(vertex_cnt);
+            geodetic.Cell0DsCoordinates(0, vertex_cnt) = p.x;
+            geodetic.Cell0DsCoordinates(1, vertex_cnt) = p.y;
+            geodetic.Cell0DsCoordinates(2, vertex_cnt) = p.z;
+            
+            vertex_cnt++;
+        }
+
+        if (prev != -1 && get_edge(id,prev,geodetic) == -1){
+            geodetic.Cell0DsId.push_back(edge_cnt);
+            geodetic.Cell1DsExtrema(0, edge_cnt) = id;
+            geodetic.Cell1DsExtrema(1, edge_cnt) = prev;
+            edge_cnt++;
+        }
+
+        prev = id;
+
+        if (h%2 == 0)
+        {
+            int old_node = -1;
+            for(int k = 0; k <= h/2; k++){
+                Point p2 = p + (r1*k);
+                int id = get_id(p2, geodetic);
+                if (id == -1){
+                    id = vertex_cnt;
+                    geodetic.Cell0DsId.push_back(vertex_cnt);
+                    geodetic.Cell0DsCoordinates(0, vertex_cnt) = p2.x;
+                    geodetic.Cell0DsCoordinates(1, vertex_cnt) = p2.y;
+                    geodetic.Cell0DsCoordinates(2, vertex_cnt) = p2.z;
+                    vertex_cnt++;
+                }
+
+                if (old_node != -1){
+                    if (get_edge(id,old_node,geodetic) == -1){
+                        geodetic.Cell0DsId.push_back(edge_cnt);
+                        geodetic.Cell1DsExtrema(0, edge_cnt) = id;
+                        geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
+                        edge_cnt++;
+                    }
+                    if (old_node != -1){
+                        if (get_edge(id,old_node,geodetic) == -1){
+                            geodetic.Cell0DsId.push_back(edge_cnt);
+                            geodetic.Cell1DsExtrema(0, edge_cnt) = id;
+                            geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
+                            edge_cnt++;
+                        }
+                    }
+                }
+
+                old_node = id;
+            } 
+
+            old_node = -1;
+            for(int k = 0; k <= b - (h/2); k++){
+                Point p2 = p + (r2*k);
+                int id = get_id(p2, geodetic); 
+                if (id == -1){
+                    id = vertex_cnt;
+                    geodetic.Cell0DsId.push_back(vertex_cnt);
+                    geodetic.Cell0DsCoordinates(0, vertex_cnt) = p2.x;
+                    geodetic.Cell0DsCoordinates(1, vertex_cnt) = p2.y;
+                    geodetic.Cell0DsCoordinates(2, vertex_cnt) = p2.z;
+                    vertex_cnt++;
+                }
+
+                if (old_node != -1 && get_edge(id,old_node,geodetic) == -1){
+                    geodetic.Cell0DsId.push_back(edge_cnt);
+                    geodetic.Cell1DsExtrema(0, edge_cnt) = id;
+                    geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
+                    edge_cnt++;
+                }
+
+                old_node = id;
+            } 
+        }
+    }
 }
 
 

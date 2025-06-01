@@ -51,5 +51,5 @@ int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic);
 
 PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T);
 
-void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt);
+void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt);
 }

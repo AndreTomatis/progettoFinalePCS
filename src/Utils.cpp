@@ -506,7 +506,7 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
     unsigned int vertex_cnt = 0;
     vector<vector<unsigned int>> old_ps(b+1);
 
-    for(size_t i = 0; i < 3; ++i){
+    for(size_t i = 0; i < mesh.NumCell2Ds; ++i){
         for(unsigned int j = 0; j < mesh.Cell2DsVertices[i].size(); ++j){
             
             ps[j].x = mesh.Cell0DsCoordinates(0, mesh.Cell2DsVertices[i][j]);
@@ -524,9 +524,11 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
         Point r2 = (center - ps[0]) / b;
         Point r3 = (center - ps[2]) / b;
 
-        side(geodetic, ps[1], u, r3, r1, b, vertex_cnt, edge_cnt);
-        side(geodetic, ps[0], v, r3, r2, b, vertex_cnt, edge_cnt);
-        side(geodetic, ps[0], z, r1, r2, b, vertex_cnt, edge_cnt);
+        double bb = (ps[0]-ps[1]).norm()/(2*b);
+
+        side(geodetic, bb, ps[1], u, r3, r1, b, vertex_cnt, edge_cnt);
+        side(geodetic, bb, ps[0], v, r3, r2, b, vertex_cnt, edge_cnt);
+        side(geodetic, bb, ps[0], z, r1, r2, b, vertex_cnt, edge_cnt);
 
 
         cout << vertex_cnt<<endl;
@@ -552,6 +554,7 @@ int get_id(Point p, PolygonalMesh geodetic)
 }
 
 
+
 int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic)
 {
     for (unsigned int i =0; i < geodetic.Cell1DsExtrema.cols(); i++){
@@ -564,7 +567,7 @@ int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic)
 }
 
 
-void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt){
+void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt){
     int prev = -1;
     for (int h = 0; h < 2*b + 1; h++){
         Point p = p0 + (u * h);
@@ -580,7 +583,7 @@ void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b,
         }
 
         if (prev != -1 && get_edge(id,prev,geodetic) == -1){
-            geodetic.Cell0DsId.push_back(edge_cnt);
+            geodetic.Cell1DsId.push_back(edge_cnt);
             geodetic.Cell1DsExtrema(0, edge_cnt) = id;
             geodetic.Cell1DsExtrema(1, edge_cnt) = prev;
             edge_cnt++;
@@ -591,9 +594,15 @@ void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b,
         if (h%2 == 0)
         {
             int old_node = -1;
-            for(int k = 0; k <= h/2; k++){
+            double height = bb * (h/2) * sqrt(3);
+            double lim = floor(height/r1.norm());
+            
+            for(int k =0; k <= lim; k++){
+
                 Point p2 = p + (r1*k);
+
                 int id = get_id(p2, geodetic);
+
                 if (id == -1){
                     id = vertex_cnt;
                     geodetic.Cell0DsId.push_back(vertex_cnt);
@@ -605,28 +614,47 @@ void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b,
 
                 if (old_node != -1){
                     if (get_edge(id,old_node,geodetic) == -1){
+                        geodetic.Cell1DsId.push_back(edge_cnt);
+                        geodetic.Cell1DsExtrema(0, edge_cnt) = id;
+                        geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
+                        edge_cnt++;
+                    }
+                }
+
+                old_node = id;
+
+                if(k==lim && r1.norm()*k < height){
+                    Point p2 = p + (r1*k) + (r1/2);
+
+                    int id = get_id(p2, geodetic); 
+                    if (id == -1){
+                        id = vertex_cnt;
+                        geodetic.Cell0DsId.push_back(vertex_cnt);
+                        geodetic.Cell0DsCoordinates(0, vertex_cnt) = p2.x;
+                        geodetic.Cell0DsCoordinates(1, vertex_cnt) = p2.y;
+                        geodetic.Cell0DsCoordinates(2, vertex_cnt) = p2.z;
+                        vertex_cnt++;
+                    }
+
+                    if (old_node != -1 && get_edge(id,old_node,geodetic) == -1){
                         geodetic.Cell0DsId.push_back(edge_cnt);
                         geodetic.Cell1DsExtrema(0, edge_cnt) = id;
                         geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
                         edge_cnt++;
                     }
-                    if (old_node != -1){
-                        if (get_edge(id,old_node,geodetic) == -1){
-                            geodetic.Cell0DsId.push_back(edge_cnt);
-                            geodetic.Cell1DsExtrema(0, edge_cnt) = id;
-                            geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
-                            edge_cnt++;
-                        }
-                    }
                 }
-
-                old_node = id;
             } 
 
             old_node = -1;
-            for(int k = 0; k <= b - (h/2); k++){
+            
+            height = bb * (b-h/2) * sqrt(3);
+            lim = floor(height/r2.norm());
+            
+            for(int k =0; k <= lim; k++){
                 Point p2 = p + (r2*k);
+
                 int id = get_id(p2, geodetic); 
+
                 if (id == -1){
                     id = vertex_cnt;
                     geodetic.Cell0DsId.push_back(vertex_cnt);
@@ -644,6 +672,27 @@ void side(PolygonalMesh& geodetic, Point p0, Point u, Point r1, Point r2, int b,
                 }
 
                 old_node = id;
+
+                if(k==lim && r2.norm()*k < height){
+                    Point p2 = p + (r2*k) + (r2/2);
+
+                    int id = get_id(p2, geodetic); 
+                    if (id == -1){
+                        id = vertex_cnt;
+                        geodetic.Cell0DsId.push_back(vertex_cnt);
+                        geodetic.Cell0DsCoordinates(0, vertex_cnt) = p2.x;
+                        geodetic.Cell0DsCoordinates(1, vertex_cnt) = p2.y;
+                        geodetic.Cell0DsCoordinates(2, vertex_cnt) = p2.z;
+                        vertex_cnt++;
+                    }
+
+                    if (old_node != -1 && get_edge(id,old_node,geodetic) == -1){
+                        geodetic.Cell0DsId.push_back(edge_cnt);
+                        geodetic.Cell1DsExtrema(0, edge_cnt) = id;
+                        geodetic.Cell1DsExtrema(1, edge_cnt) = old_node;
+                        edge_cnt++;
+                    }
+                }
             } 
         }
     }

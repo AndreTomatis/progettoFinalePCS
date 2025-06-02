@@ -58,15 +58,10 @@ int main(int argc, char* argv[])
 
         unsigned int T = b*b + b*c + c*c;
 
-        mesh = Triangulation_2(mesh, b, T);
-        
-        UCDUtilities utilities;
-        utilities.ExportPoints("./Cell0Ds.inp",
-                               mesh.Cell0DsCoordinates);
-        utilities.ExportSegments("./Cell1Ds.inp",
-                                 mesh.Cell0DsCoordinates,
-                                 mesh.Cell1DsExtrema);
-        return 0;
+        if (b==c)
+            mesh = Triangulation_2(mesh, b, T);
+        else 
+            mesh = Triangulation_1(mesh, b, T);
 
 
         // project the vertices on a circumference
@@ -76,74 +71,74 @@ int main(int argc, char* argv[])
 
         
 
+        if (b != c){
+            if(!swap){
+                cout << "Trying Goldberg" << endl;
+                mesh = mesh.CreateDual();
+            }
 
-        // if(!swap){
-        //     cout << "Trying Goldberg" << endl;
-        //     mesh = mesh.CreateDual();
-        // }
+            // project the vertices on a circumference
+            for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
+                mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
+            }
+        }
 
-        // // project the vertices on a circumference
-        // for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
-        //     mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
-        // }
+        if (argc == 7){
+            mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));
+        }
+        
         
 
-        // if (argc == 7){
-        //     mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));
-        // }
+        mesh.ExportTXT();
 
-        
+        UCDUtilities utilities;
 
-        // mesh.ExportTXT();
+        // export nodes
+        vector<Gedim::UCDProperty<double>> cell0Ds_properties(1);
 
-        // UCDUtilities utilities;
+        cell0Ds_properties[0].Label = "Marker";
+        cell0Ds_properties[0].UnitLabel = "-";
+        cell0Ds_properties[0].NumComponents = 1;
 
-        // // export nodes
-        // vector<Gedim::UCDProperty<double>> cell0Ds_properties(1);
+        vector<double> cell0Ds_marker(mesh.NumCell0Ds, 0.0);
+        for(const auto &m : mesh.ShortestPathNodes)
+            for(const unsigned int id: m.second)
+                cell0Ds_marker.at(id) = m.first;
 
-        // cell0Ds_properties[0].Label = "Marker";
-        // cell0Ds_properties[0].UnitLabel = "-";
-        // cell0Ds_properties[0].NumComponents = 1;
+        cell0Ds_properties[0].Data = cell0Ds_marker.data();
 
-        // vector<double> cell0Ds_marker(mesh.NumCell0Ds, 0.0);
-        // for(const auto &m : mesh.ShortestPathNodes)
-        //     for(const unsigned int id: m.second)
-        //         cell0Ds_marker.at(id) = m.first;
-
-        // cell0Ds_properties[0].Data = cell0Ds_marker.data();
-
-        // utilities.ExportPoints("./Cell0Ds.inp",
-        //                        mesh.Cell0DsCoordinates,
-        //                        cell0Ds_properties);
+        utilities.ExportPoints("./Cell0Ds.inp",
+                               mesh.Cell0DsCoordinates,
+                               cell0Ds_properties);
         
         
 
         // // export edges
-        // vector<Gedim::UCDProperty<double>> cell1Ds_properties(1);
+        vector<Gedim::UCDProperty<double>> cell1Ds_properties(1);
 
-        // cell1Ds_properties[0].Label = "Marker";
-        // cell1Ds_properties[0].UnitLabel = "-";
-        // cell1Ds_properties[0].NumComponents = 1;
+        cell1Ds_properties[0].Label = "Marker";
+        cell1Ds_properties[0].UnitLabel = "-";
+        cell1Ds_properties[0].NumComponents = 1;
 
-        // vector<double> cell1Ds_marker(mesh.NumCell1Ds, 0.0);
-        // for(const auto &m : mesh.ShortestPathEdges)
-        //     for(const unsigned int id: m.second)
-        //         cell1Ds_marker.at(id) = m.first;
+        vector<double> cell1Ds_marker(mesh.NumCell1Ds, 0.0);
+        for(const auto &m : mesh.ShortestPathEdges)
+            for(const unsigned int id: m.second)
+                cell1Ds_marker.at(id) = m.first;
 
-        // cell1Ds_properties[0].Data = cell1Ds_marker.data();
+        cell1Ds_properties[0].Data = cell1Ds_marker.data();
 
-        // utilities.ExportSegments("./Cell1Ds.inp",
-        //                          mesh.Cell0DsCoordinates,
-        //                          mesh.Cell1DsExtrema,
-        //                          {},
-        //                          cell1Ds_properties);
+        utilities.ExportSegments("./Cell1Ds.inp",
+                                 mesh.Cell0DsCoordinates,
+                                 mesh.Cell1DsExtrema,
+                                 {},
+                                 cell1Ds_properties);
         
 
 
         // // export polygon
-        // if (p == 3) utilities.ExportPolygons("./Cell2Ds.inp",
-        //                          mesh.Cell0DsCoordinates,
-        //                          mesh.Cell2DsVertices);
+        if (p == 3 && b != c) utilities.ExportPolygons("./Cell2Ds.inp",
+                                 mesh.Cell0DsCoordinates,
+                                 mesh.Cell2DsVertices);
 
 
     }else{

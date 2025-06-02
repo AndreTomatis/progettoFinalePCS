@@ -482,8 +482,8 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
         geodetic.NumCell2Ds = 8*T;
         break;
     case 5:
-        geodetic.NumCell0Ds = 1000;
-        geodetic.NumCell1Ds = 10000;
+        geodetic.NumCell0Ds = 10000;
+        geodetic.NumCell1Ds = 50000;
         geodetic.NumCell2Ds = 20*T;
         break;
     }
@@ -492,13 +492,8 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
     geodetic.Cell0DsId.reserve(geodetic.NumCell0Ds);
     geodetic.Cell0DsCoordinates = Eigen::MatrixXd::Zero(3, geodetic.NumCell0Ds);
     
-    
     geodetic.Cell1DsId.reserve(geodetic.NumCell1Ds);
     geodetic.Cell1DsExtrema = Eigen::MatrixXi(2, geodetic.NumCell1Ds);
-    
-    geodetic.Cell2DsId.resize(geodetic.NumCell2Ds);
-    geodetic.Cell2DsVertices.resize(geodetic.NumCell2Ds);
-    geodetic.Cell2DsEdges.resize(geodetic.NumCell2Ds);
 
     unsigned int id_cnt = 0;
     unsigned int edge_cnt = 0;
@@ -529,9 +524,6 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
         side(geodetic, bb, ps[1], u, r3, r1, b, vertex_cnt, edge_cnt);
         side(geodetic, bb, ps[0], v, r3, r2, b, vertex_cnt, edge_cnt);
         side(geodetic, bb, ps[0], z, r1, r2, b, vertex_cnt, edge_cnt);
-
-
-        cout << vertex_cnt<<endl;
     }
 
 
@@ -595,6 +587,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
         {
             int old_node = -1;
             double height = bb * (h/2) * sqrt(3);
+    
             double lim = floor(height/r1.norm());
             
             for(int k =0; k <= lim; k++){
@@ -624,7 +617,11 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
                 old_node = id;
 
                 if(k==lim && r1.norm()*k < height){
-                    Point p2 = p + (r1*k) + (r1/2);
+                    Point p2;
+                    if(abs(r1.norm()*(k+1) -height)<=0.001)
+                        p2 = p + r1*(k+1);
+                    else
+                        p2 = p + r1*k + (r1/2);
 
                     int id = get_id(p2, geodetic); 
                     if (id == -1){
@@ -674,7 +671,11 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
                 old_node = id;
 
                 if(k==lim && r2.norm()*k < height){
-                    Point p2 = p + (r2*k) + (r2/2);
+                    Point p2;
+                    if(abs(r2.norm()*(k+1) -height)<=0.001)
+                        p2 = p + r2*(k+1);
+                    else
+                        p2 = p + r2*k + (r2/2);
 
                     int id = get_id(p2, geodetic); 
                     if (id == -1){

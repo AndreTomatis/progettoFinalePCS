@@ -343,7 +343,8 @@ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T
                 Point p = ps[0] + u*h + v*j; 
 
                 //store points and vertices
-                int id = get_id(p, geodetic);
+                
+                int id = get_id_1(p, geodetic);
 
                 if (id == -1){
                     id = id_cnt++;
@@ -532,8 +533,19 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
 }
 
 
+int get_id_1(Point p, PolygonalMesh geodetic)
+{
+    for (unsigned int i =0; i < geodetic.Cell0DsCoordinates.cols(); i++){
+        if (abs(p.x - geodetic.Cell0DsCoordinates(0,i)) <= 0.0001
+            && abs(p.y - geodetic.Cell0DsCoordinates(1,i)) <= 0.0001
+            && abs(p.z - geodetic.Cell0DsCoordinates(2,i)) <= 0.0001){
+            return i;
+        }
+    }
+    return -1;
+}
 
-int get_id(Point p, PolygonalMesh geodetic)
+int get_id_2(Point p, PolygonalMesh geodetic)
 {
     for (unsigned int i =0; i < geodetic.NumCell2Ds; i++){
         if (abs(p.x - geodetic.Cell0DsCoordinates(0,i)) <= 0.0001
@@ -563,7 +575,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
     int prev = -1;
     for (int h = 0; h < 2*b + 1; h++){
         Point p = p0 + (u * h);
-        int id = get_id(p, geodetic);
+        int id = get_id_2(p, geodetic);
         if (id == -1){
             id = vertex_cnt;
             geodetic.Cell0DsId.push_back(vertex_cnt);
@@ -594,7 +606,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
 
                 Point p2 = p + (r1*k);
 
-                int id = get_id(p2, geodetic);
+                int id = get_id_2(p2, geodetic);
 
                 if (id == -1){
                     id = vertex_cnt;
@@ -623,7 +635,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
                     else
                         p2 = p + r1*k + (r1/2);
 
-                    int id = get_id(p2, geodetic); 
+                    int id = get_id_2(p2, geodetic); 
                     if (id == -1){
                         id = vertex_cnt;
                         geodetic.Cell0DsId.push_back(vertex_cnt);
@@ -650,7 +662,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
             for(int k =0; k <= lim; k++){
                 Point p2 = p + (r2*k);
 
-                int id = get_id(p2, geodetic); 
+                int id = get_id_2(p2, geodetic); 
 
                 if (id == -1){
                     id = vertex_cnt;
@@ -677,7 +689,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
                     else
                         p2 = p + r2*k + (r2/2);
 
-                    int id = get_id(p2, geodetic); 
+                    int id = get_id_2(p2, geodetic); 
                     if (id == -1){
                         id = vertex_cnt;
                         geodetic.Cell0DsId.push_back(vertex_cnt);

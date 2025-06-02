@@ -46,10 +46,12 @@ bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned in
 
 PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T);
 
-int get_id(Point p, PolygonalMesh geodetic);
+int get_id_2(Point p, PolygonalMesh geodetic);
 int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic);
 
 PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T);
 
 void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt);
+
+int get_id_1(Point p, PolygonalMesh geodetic);
 }

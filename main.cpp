@@ -66,9 +66,9 @@ int main(int argc, char* argv[])
 
 
         // project the vertices on a circumference
-        // for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
-        //     mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
-        // }
+        for(unsigned int i = 0; i < mesh.NumCell0Ds; i++){
+            mesh.Cell0DsCoordinates.col(i) /= mesh.Cell0DsCoordinates.col(i).norm();
+        }
 
         
 

@@ -61,6 +61,37 @@ TEST_F(PolygonalMeshTest, NonNullEdges_Dual){
     }
 }
 
+
+TEST_F(PolygonalMeshTest, NonNullEdges_Geodetic){
+    for (unsigned int i = 0; i < 3; i++){
+        for(int b = 1; b < 5; b++){
+            PolygonalMesh geod = Triangulation_1(polygons[i], b, b*b);
+            for (unsigned int j = 0; j < geod.Cell1DsExtrema.cols(); ++j) {
+                
+                bool zero_length = (geod.Cell1DsExtrema(0,j) == geod.Cell1DsExtrema(1,j));
+                
+                EXPECT_EQ(zero_length, false);
+            }
+        }
+    }
+}
+
+
+TEST_F(PolygonalMeshTest, NonNullEdges_Goldberg){
+    for (unsigned int i = 0; i < 3; i++){
+        for(int b = 1; b < 5; b++){
+            PolygonalMesh geod = Triangulation_2(polygons[i], b, 3*b*b);
+            for (unsigned int j = 0; j < geod.Cell1DsExtrema.cols(); ++j) {
+                
+                bool zero_length = (geod.Cell1DsExtrema(0,j) == geod.Cell1DsExtrema(1,j));
+                
+                EXPECT_EQ(zero_length, false);
+            }
+        }
+    }
+}
+
+
 //test per vedere se tutti gli edges sono lunghi uguali
 TEST_F(PolygonalMeshTest, SameLengthEdges){
     
@@ -83,7 +114,7 @@ TEST_F(PolygonalMeshTest, SameLengthEdges){
     }
 }
 
-/*
+
 TEST_F(PolygonalMeshTest, SameLengthEdges_Dual){
     
     for (unsigned int i = 0; i < 3; i++){
@@ -100,11 +131,11 @@ TEST_F(PolygonalMeshTest, SameLengthEdges_Dual){
                 cout << i << j << " " << ref_length << " " << cmp_length << endl;
             }
 
+
             EXPECT_EQ(ref_length - cmp_length < 0.01, true);
         }
     }
 }
-*/
 
 
 TEST_F(PolygonalMeshTest, NonNullFaces){
@@ -124,6 +155,7 @@ TEST_F(PolygonalMeshTest, NonNullFaces){
     }
 }
 
+
 TEST_F(PolygonalMeshTest, NonNullFaces_Dual){
     for (unsigned int i = 0; i < 3; i++) {
         for(unsigned int j = 0; j < duals[i].Cell2DsVertices.size(); j++){
@@ -140,6 +172,47 @@ TEST_F(PolygonalMeshTest, NonNullFaces_Dual){
         }
     }
 }
+
+TEST_F(PolygonalMeshTest, NonNullFaces_Geodetic){
+    for (unsigned int i = 0; i < 3; i++) {
+        for(int b = 1; b < 5; b++){
+            PolygonalMesh geod = Triangulation_1(polygons[i], b, b*b);
+            for(unsigned int j = 0; j < geod.Cell2DsVertices.size(); j++){
+                Eigen::Vector3d area_vector(0, 0, 0);
+                for(unsigned int k =0; k < geod.Cell2DsVertices[j].size(); k++){
+                    auto id1 =  geod.Cell2DsVertices[j][k];
+                    auto id2 =  geod.Cell2DsVertices[j][(k+1) % geod.Cell2DsVertices[j].size()];
+                    const Eigen::Vector3d& v1= geod.Cell0DsCoordinates.col(id1);
+                    const Eigen::Vector3d& v2= geod.Cell0DsCoordinates.col(id2);
+                    area_vector += v1.cross(v2);
+                }
+                bool null_area = (0.5 * area_vector.norm()) < 1e-16;
+                EXPECT_EQ(null_area, false);
+            }
+        }
+    }
+}
+
+TEST_F(PolygonalMeshTest, NonNullFaces_Goldberg){
+    for (unsigned int i = 0; i < 3; i++) {
+        for(int b = 1; b < 5; b++){
+            PolygonalMesh geod = Triangulation_2(polygons[i], b, 3*b*b);
+            for(unsigned int j = 0; j < geod.Cell2DsVertices.size(); j++){
+                Eigen::Vector3d area_vector(0, 0, 0);
+                for(unsigned int k =0; k < geod.Cell2DsVertices[j].size(); k++){
+                    auto id1 =  geod.Cell2DsVertices[j][k];
+                    auto id2 =  geod.Cell2DsVertices[j][(k+1) % geod.Cell2DsVertices[j].size()];
+                    const Eigen::Vector3d& v1= geod.Cell0DsCoordinates.col(id1);
+                    const Eigen::Vector3d& v2= geod.Cell0DsCoordinates.col(id2);
+                    area_vector += v1.cross(v2);
+                }
+                bool null_area = (0.5 * area_vector.norm()) < 1e-16;
+                EXPECT_EQ(null_area, false);
+            }
+        }
+    }
+}
+
 
 //TEST per controllare che tutte le figure siano inscritte nella circonferenza
 TEST_F(PolygonalMeshTest, InCircumference){
@@ -165,4 +238,33 @@ TEST_F(PolygonalMeshTest, InCircumference_Dual){
     }
 }
 
-}  // SortLibrary
+//TEST per controllare che tutte le figure siano inscritte nella circonferenza
+TEST_F(PolygonalMeshTest, InCircumference_Geodetic){
+    for (unsigned int i = 0; i < 3; i++){
+        for(int b = 1; b < 5; b++){
+            PolygonalMesh geod = Triangulation_1(polygons[i], b, b*b);
+            for (unsigned int j = 0; j < geod.Cell0DsCoordinates.cols(); ++j) {
+                float module = geod.Cell0DsCoordinates.col(j).norm();
+                bool valid = abs(module - 1.0) < 1e-6;
+                
+                EXPECT_EQ(valid, true);
+            }
+        }
+    }
+}
+
+TEST_F(PolygonalMeshTest, InCircumference_Goldberg){
+    for (unsigned int i = 0; i < 3; i++){
+        for(int b = 1; b < 5; b++){
+            PolygonalMesh geod = Triangulation_2(polygons[i], b, 3*b*b);
+            for (unsigned int j = 0; j < geod.Cell0DsCoordinates.cols(); ++j) {
+                float module = geod.Cell0DsCoordinates.col(j).norm();
+                bool valid = abs(module - 1.0) < 1e-6;
+                
+                EXPECT_EQ(valid, true);
+            }
+        }
+    }
+}
+
+}  // TestLibrary

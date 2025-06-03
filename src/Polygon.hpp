@@ -36,6 +36,8 @@ struct PolygonalMesh
     std::map<unsigned int, list<unsigned int>> ShortestPathEdges = {};
 
 
+    PolygonalMesh() {p =0; q=0;}
+
     PolygonalMesh(unsigned int p, unsigned int q) : p(p), q(q) {}
 
 

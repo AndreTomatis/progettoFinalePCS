@@ -474,7 +474,7 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
     {
     case 3:
         geodetic.NumCell0Ds = 1000;
-        geodetic.NumCell1Ds = 1000;
+        geodetic.NumCell1Ds = 10000;
         geodetic.NumCell2Ds = 4*T;
         break;
     case 4:
@@ -484,7 +484,7 @@ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T
         break;
     case 5:
         geodetic.NumCell0Ds = 10000;
-        geodetic.NumCell1Ds = 50000;
+        geodetic.NumCell1Ds = 100000;
         geodetic.NumCell2Ds = 20*T;
         break;
     }
@@ -628,7 +628,7 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
 
                 old_node = id;
 
-                if(k==lim && r1.norm()*k < height){
+                if(k==lim && (r1.norm()*k - height) > 0.01){
                     Point p2;
                     if(abs(r1.norm()*(k+1) -height)<=0.001)
                         p2 = p + r1*(k+1);
@@ -682,7 +682,8 @@ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point
 
                 old_node = id;
 
-                if(k==lim && r2.norm()*k < height){
+                if(k==lim && abs(r2.norm()*k - height) > 0.001){
+
                     Point p2;
                     if(abs(r2.norm()*(k+1) -height)<=0.001)
                         p2 = p + r2*(k+1);

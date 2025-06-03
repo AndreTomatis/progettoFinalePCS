@@ -18,6 +18,7 @@
         "algorithm": "cpp",
         "map": "cpp",
         "functional": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "ostream": "cpp"
     }
 }

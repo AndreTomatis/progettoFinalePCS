@@ -1,0 +1,24 @@
+@startuml
+!theme plain
+User -> Main : p,q,b,c,startId,endId
+Main -> Utilities:control input
+Main <- Utilities:check_result
+Main -> Utilities: import mesh
+Utilities-> OS: Get file
+OS->Utilities: file
+Utilities<-Utilities: create mesh
+Utilities->Main:mesh
+Main -> PolygonalMesh: request_dual (mesh) 
+Main <- PolygonalMesh: dual
+Main->Utilities: request Triangulation (1 or 2)
+Main<-Utilities: meshT
+Main->Main: project the verticles on unit sphere
+Main->PolygonalMesh: export .txt
+Main->Dijkstra: find shortest path from startId to endId in [meshT]
+Main<-Dijkstra: modified mesh
+Main->UCDUtilities: export points Cells0D and Marker
+UCDUtilities->OS: Cell0D.inp
+Main->UCDUtilities: export segments Cells1D and Marker
+UCDUtilities->OS: Cell1D.inp
+User->Paraview: Render Cell0D.inp and Cell1D.inp
+@enduml

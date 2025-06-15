@@ -11,7 +11,7 @@ using namespace std;
 
 namespace TestLibrary{
 
-// The fixture for testing class Foo.
+
 class PolygonalMeshTest : public testing::Test {
  public:
     bool imp1,imp2, imp3;

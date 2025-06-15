@@ -1,0 +1,129 @@
+@startuml
+!theme vibrant
+' Ogni codice UML inizia e termina con staruml - enduml
+
+
+title Compute polygon area
+
+' Create package with folder style
+package PolygonalLibrary <<Folder>>
+{
+
+class Polygon{
+' Visibility NameVaribale : Type
++ VerticesCoordinates : MatrixXd
++ listVertices : std::vector<std::vector<unsigned int>>
++ p,q : unsigned int
++ NumCell0Ds : unsigned int
++ NumCell1Ds : unsigned int
++ NumCell2Ds : unsigned int
++ NumCell3Ds : unsigned int
+
++ Cell0DsId : vector<unsigned int>
++ Cell1DsId : vector<unsigned int>
++ Cell2DsId : vector<unsigned int>
++ Cell3DsId : vector<unsigned int>
+
++ Cell0DsCoordinates : Eigen::MatrixXd
++ Cell1DsExtrema : Eigen::MatrixXi
++ Cell2DsVertices : vector<vector<unsigned int>>
++ Cell2DsEdges : vector<vector<unsigned int>>
++ Cell3DsVertices : vector<vector<unsigned int>>
++ Cell3DsEdges : vector<vector<unsigned int>>
++ Cell3DsFaces : vector<vector<unsigned int>>
+
++ ShortestPathNodes : std::map<unsigned int, list<unsigned int>>
++ ShortestPathEdges : std::map<unsigned int, list<unsigned int>>
+
++ PolygonalMesh()
++ PolygonalMesh(unsigned int p, unsigned int q)
++ PolygonalMesh CreateDual(){
++ void ExportTXT()
+
+}
+ 
+object Utilities{
++ bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned int c)
++ bool ImportMesh(PolygonalMesh& mesh, string filename)
++ bool ImportCell0Ds(PolygonalMesh& mesh, string filename)
++ bool ImportCell1Ds(PolygonalMesh& mesh, string filename)
++ bool ImportCell2Ds(PolygonalMesh& mesh, string filename)
++ bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
++ PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T)
++ PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T)
++ int get_id_2(Point p, PolygonalMesh geodetic)
++ int get_edge(unsigned int id1, unsigned int id2, PolygonalMesh geodetic)
++ void side(PolygonalMesh& geodetic, double bb, Point p0, Point u, Point r1, Point r2, int b, unsigned int& vertex_cnt, unsigned int& edge_cnt)
++ int get_id_1(Point p, PolygonalMesh geodetic)
+}
+
+
+' Modeling relationship: https://blog.visual-paradigm.com/what-are-the-six-types-of-relationships-in-uml-class-diagrams/#:~:text=There%20are%20six%20main%20types,aggregation%20%2C%20association%2C%20and%20dependency%20.
+
+' Left, right, up, down to try to orient classes in the space based on their relationship
+
+}
+
+
+package TestLibrary <<Folder>>
+{
+
+class PolygonalMeshTest{
+' Visibility NameVaribale : Type
+
++ imp1 : bool
++ imp2 : bool
++ imp3 : bool
++ polygons : PolygonalMesh[3];
++ duals : PolygonalMesh[3];
+
++ PolygonalMeshTest() 
++ TEST_F(PolygonalMeshTest, Imports)
++ TEST_F(PolygonalMeshTest, NonNullEdges)
++ TEST_F(PolygonalMeshTest, NonNullEdges_Dual)
++ TEST_F(PolygonalMeshTest, NonNullEdges_Geodetic)
++ TEST_F(PolygonalMeshTest, NonNullEdges_Goldberg)
++ TEST_F(PolygonalMeshTest, SameLengthEdges)
++ TEST_F(PolygonalMeshTest, SameLengthEdges_Dual)
++ TEST_F(PolygonalMeshTest, NonNullFaces)
++ TEST_F(PolygonalMeshTest, NonNullFaces_Dual)
++ TEST_F(PolygonalMeshTest, NonNullFaces_Geodetic)
++ TEST_F(PolygonalMeshTest, NonNullFaces_Goldberg)
++ TEST_F(PolygonalMeshTest, InCircumference)
++ TEST_F(PolygonalMeshTest, InCircumference_Dual)
++ TEST_F(PolygonalMeshTest, InCircumference_Geodetic)
++ TEST_F(PolygonalMeshTest, InCircumference_Goldberg)
+}
+
+}
+
+
+
+package ShortestPathLib <<Folder>>
+{
+
+object Dijkstra{
++ vector<vector<unsigned int>> AdjList(const Eigen::MatrixXi& edges, unsigned int V)
++ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsigned int& dest)
+}
+
+}
+
+package Gedim <<Frame>>
+{
+
+}
+
+
+
+
+' PlotPolygon relies upon Gedim
+Polygon::GedimInterface --right--> Gedim
+Polygon::PolygonalMeshTest --down--> PolygonalMeshTest
+Polygon::Dijkstra --down--> Dijkstra
+Polygon::Utilities --right--> Utilities
+
+' Add notes and link it with an object thourgh the sumbol ..
+note "external package for rendering" as GedimNote
+GedimNote .. Gedim
+@enduml

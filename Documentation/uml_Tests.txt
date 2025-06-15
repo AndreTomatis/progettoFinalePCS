@@ -1,0 +1,22 @@
+@startuml
+!theme vibrant
+MainTest -> TestPolygon : run all tests
+TestPolygon -> Library: request import mesh
+TestPolygon <- Library: mesh
+
+TestPolygon -> Library: request dual (mesh) 
+TestPolygon <- Library: dual
+
+TestPolygon -> TestPolygon: Test Imports
+TestPolygon -> TestPolygon: Test NonNullEdges (+ Dual)
+TestPolygon -> TestPolygon: Test SameLengthEdges (+ Dual)
+TestPolygon -> TestPolygon: Test NonNullFaces (+ Dual)
+TestPolygon -> TestPolygon: Test InCircumference (+ Dual)
+
+TestPolygon-> Library: request Triangulation (1 and 2) b = 1,..,4
+TestPolygon <-Library: mesh
+
+TestPolygon -> TestPolygon: Test NonNullEdges_Geodetic (+ Goldberg)
+TestPolygon -> TestPolygon: Test NonNullFaces_Geodetic (+ Goldberg)
+TestPolygon -> TestPolygon: Test InCircumference_Geodetic (+ Goldberg)
+@enduml

@@ -15,4 +15,6 @@ vector<vector<unsigned int>> AdjList(const Eigen::MatrixXi& edges, unsigned int 
 
 PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsigned int& dest);
 
+double findPathLength(PolygonalMesh& mesh);
+
 }

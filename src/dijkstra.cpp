@@ -132,4 +132,19 @@ PolygonalMesh Dijkstra(PolygonalMesh& mesh, const unsigned int& src, const unsig
 
 } //Dijkstra end
 
+
+double findPathLength(PolygonalMesh& mesh){
+    unsigned int prev = -1;
+    double total_length = 0;
+    for (const auto& node : mesh.ShortestPathNodes[1]) {
+        if (prev != -1)
+            total_length += (mesh.Cell0DsCoordinates.col(node)-mesh.Cell0DsCoordinates.col(prev)).norm();
+            
+        prev = node;
+    }
+
+    return total_length;
+}
+
+
 } //namespace end

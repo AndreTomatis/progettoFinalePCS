@@ -86,6 +86,7 @@ int main(int argc, char* argv[])
 
         if (argc == 7){
             mesh = ShortestPathLib::Dijkstra(mesh, stoi(argv[5]), stoi(argv[6]));
+            cout << "The total path length from " << argv[5] << " to " << argv[6] << " is: " << ShortestPathLib::findPathLength(mesh) << endl;
         }
         
         

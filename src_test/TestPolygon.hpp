@@ -17,12 +17,12 @@ class PolygonalMeshTest : public testing::Test {
     bool imp1,imp2, imp3;
  protected:
 
-  PolygonalMeshTest() {
+  void SetUp() override {
     imp1 = ImportMesh(polygons[0], "../Polygons/p3q3/");
     imp2 = ImportMesh(polygons[1], "../Polygons/p4q3/");
     imp3 = ImportMesh(polygons[2], "../Polygons/p5q3/");
-    for(int i=0; i<3; i++)
-        duals[0] = polygons[0].CreateDual();
+    for (int i =0; i < 3; i++)
+        duals[i] = polygons[i].CreateDual();
     
   }
 
@@ -66,6 +66,7 @@ TEST_F(PolygonalMeshTest, NonNullEdges_Geodetic){
     for (unsigned int i = 0; i < 3; i++){
         for(int b = 1; b < 5; b++){
             PolygonalMesh geod = Triangulation_1(polygons[i], b, b*b);
+            cout << geod.Cell1DsExtrema.cols()<<endl;
             for (unsigned int j = 0; j < geod.Cell1DsExtrema.cols(); ++j) {
                 
                 bool zero_length = (geod.Cell1DsExtrema(0,j) == geod.Cell1DsExtrema(1,j));

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 
 # Project definition
-project(Facsimile LANGUAGES C CXX VERSION 1.0.0)
+project(ProgettoFinale LANGUAGES C CXX VERSION 1.0.0)
 
 # Set C++ Standard
 set(CMAKE_CXX_STANDARD 20)
@@ -86,4 +86,4 @@ target_compile_options(${PROJECT_NAME}_TEST PUBLIC -fPIC)
 ################################################################################
 # Optional: Add CTest integration
 enable_testing()
-add_test(NAME FacsimileTests COMMAND ${PROJECT_NAME}_TEST)
+add_test(NAME ProgettoFinaleTests COMMAND ${PROJECT_NAME}_TEST)

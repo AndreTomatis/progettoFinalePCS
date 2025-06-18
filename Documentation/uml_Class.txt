@@ -3,7 +3,7 @@
 ' Ogni codice UML inizia e termina con staruml - enduml
 
 
-title Compute polygon area
+title PCS Final Project 2025
 
 ' Create package with folder style
 package PolygonalLibrary <<Folder>>
@@ -45,10 +45,6 @@ class Polygon{
 object Utilities{
 + bool check_arguments(unsigned int p, unsigned int q, unsigned int b, unsigned int c)
 + bool ImportMesh(PolygonalMesh& mesh, string filename)
-+ bool ImportCell0Ds(PolygonalMesh& mesh, string filename)
-+ bool ImportCell1Ds(PolygonalMesh& mesh, string filename)
-+ bool ImportCell2Ds(PolygonalMesh& mesh, string filename)
-+ bool ImportCell3Ds(PolygonalMesh& mesh, string filename)
 + PolygonalMesh Triangulation_1(PolygonalMesh mesh, unsigned int b, unsigned int T)
 + PolygonalMesh Triangulation_2(PolygonalMesh mesh, unsigned int b, unsigned int T)
 + int get_id_2(Point p, PolygonalMesh geodetic)
@@ -78,21 +74,21 @@ class PolygonalMeshTest{
 + duals : PolygonalMesh[3];
 
 + PolygonalMeshTest() 
-+ TEST_F(PolygonalMeshTest, Imports)
-+ TEST_F(PolygonalMeshTest, NonNullEdges)
-+ TEST_F(PolygonalMeshTest, NonNullEdges_Dual)
-+ TEST_F(PolygonalMeshTest, NonNullEdges_Geodetic)
-+ TEST_F(PolygonalMeshTest, NonNullEdges_Goldberg)
-+ TEST_F(PolygonalMeshTest, SameLengthEdges)
-+ TEST_F(PolygonalMeshTest, SameLengthEdges_Dual)
-+ TEST_F(PolygonalMeshTest, NonNullFaces)
-+ TEST_F(PolygonalMeshTest, NonNullFaces_Dual)
-+ TEST_F(PolygonalMeshTest, NonNullFaces_Geodetic)
-+ TEST_F(PolygonalMeshTest, NonNullFaces_Goldberg)
-+ TEST_F(PolygonalMeshTest, InCircumference)
-+ TEST_F(PolygonalMeshTest, InCircumference_Dual)
-+ TEST_F(PolygonalMeshTest, InCircumference_Geodetic)
-+ TEST_F(PolygonalMeshTest, InCircumference_Goldberg)
++ TEST_PolygonalMeshTest
++ TEST_NonNullEdges
++ TEST_NonNullEdges_Dual
++ TEST_NonNullEdges_Geodetic
++ TEST_NonNullEdges_Goldberg
++ TEST_SameLengthEdges
++ TEST_ameLengthEdges_Dual
++ TEST_NonNullFaces
++ TEST_NonNullFaces_Dual
++ TEST_NonNullFaces_Geodetic
++ TEST_NonNullFaces_Goldberg
++ TEST_InCircumference
++ TEST_InCircumference_Dual
++ TEST_InCircumference_Geodetic
++ TEST_InCircumference_Goldberg
 }
 
 }
@@ -118,10 +114,11 @@ package Gedim <<Frame>>
 
 
 ' PlotPolygon relies upon Gedim
+
 Polygon::GedimInterface --right--> Gedim
-Polygon::PolygonalMeshTest --down--> PolygonalMeshTest
-Polygon::Dijkstra --down--> Dijkstra
-Polygon::Utilities --right--> Utilities
+Polygon::PolygonalMeshTest *--down-- PolygonalMeshTest : contains many
+Polygon::Dijkstra --down--> Dijkstra : uses
+Polygon::Utilities --right--> Utilities : Non member functions
 
 ' Add notes and link it with an object thourgh the sumbol ..
 note "external package for rendering" as GedimNote
